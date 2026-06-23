@@ -25,8 +25,49 @@ theorem iUnion_subcomplex_finite [CWComplex C] {ι : Type*} (s : Finset ι)
     (E : ι → CWComplex.Subcomplex C)
     (hfin : ∀ i ∈ s, CWComplex.Finite (E i : Set X)) :
     ∃ G : CWComplex.Subcomplex C, CWComplex.Finite (G : Set X) ∧
-      ∀ i ∈ s, (E i : Set X) ⊆ (G : Set X) :=
-  sorry
+      ∀ i ∈ s, (E i : Set X) ⊆ (G : Set X) := by
+  classical
+  set U : Set X := ⋃ i ∈ s, ((E i : CWComplex.Subcomplex C) : Set X) with hU
+  set Idx : Π n, Set (Topology.CWComplex.cell C n) := fun n => ⋃ i ∈ s, (E i).I n with hIdx
+  have cs : ∀ (n : ℕ) (c : ↥(Idx n)),
+      Topology.CWComplex.closedCell (C := C) n ↑c ⊆ U := by
+    rintro n ⟨c, hc⟩
+    rw [hIdx] at hc
+    simp only [Set.mem_iUnion] at hc
+    obtain ⟨i, hi, hci⟩ := hc
+    refine (CWComplex.Subcomplex.closedCell_subset_of_mem (E i) hci).trans ?_
+    rw [hU]
+    exact fun x hx => Set.mem_biUnion hi hx
+  have un : ⋃ n, ⋃ (j : ↥(Idx n)), Topology.CWComplex.openCell (C := C) n ↑j = U := by
+    rw [hU]
+    simp_rw [← CWComplex.Subcomplex.union (C := C)]
+    ext x
+    simp only [hIdx, Set.iUnion_subtype, Set.mem_iUnion, exists_prop]
+    constructor
+    · rintro ⟨n, c, ⟨i, hi, hc⟩, hx⟩
+      exact ⟨i, hi, n, c, hc, hx⟩
+    · rintro ⟨i, hi, n, c, hc, hx⟩
+      exact ⟨n, c, ⟨i, hi, hc⟩, hx⟩
+  refine ⟨CWComplex.Subcomplex.mk' C U Idx cs un, ?_, ?_⟩
+  · rw [CWComplex.finite_iff_finite_cells]
+    simp only [CWComplex.Subcomplex.cell_def, CWComplex.Subcomplex.mk'_I, hIdx]
+    have hcell : ∀ i ∈ s, Finite (Σ n, ↥((E i).I n)) := by
+      intro i hi
+      have h := (CWComplex.finite_iff_finite_cells (C := (E i : Set X))).mp (hfin i hi)
+      simpa only [CWComplex.Subcomplex.cell_def] using h
+    haveI : ∀ i : {i // i ∈ s}, Finite (Σ n, ↥((E (i : ι)).I n)) := fun i => hcell i i.2
+    apply Finite.of_surjective
+      (f := fun p : Σ (i : {i // i ∈ s}), Σ n, ↥((E (i : ι)).I n) =>
+        (⟨p.2.1, ⟨↑p.2.2, by
+          simp only [Set.mem_iUnion]
+          exact ⟨↑p.1, p.1.2, p.2.2.2⟩⟩⟩ : Σ n, ↥(⋃ i ∈ s, (E i).I n)))
+    rintro ⟨n, ⟨c, hc⟩⟩
+    simp only [Set.mem_iUnion] at hc
+    obtain ⟨i, hi, hci⟩ := hc
+    exact ⟨⟨⟨i, hi⟩, ⟨n, ⟨c, hci⟩⟩⟩, rfl⟩
+  · intro i hi
+    rw [CWComplex.Subcomplex.coe_mk', hU]
+    exact fun x hx => Set.mem_biUnion hi hx
 
 /-- **Enlarging a subcomplex by one cell.** If the frontier of an `n`-cell is
 contained in a subcomplex `E`, then `E` extends to a subcomplex `F` containing
