@@ -32,7 +32,7 @@ theorem iUnion_subcomplex_finite [CWComplex C] {ι : Type*} (s : Finset ι)
 contained in a subcomplex `E`, then `E` extends to a subcomplex `F` containing
 the whole closed cell, and `F` is finite whenever `E` is. -/
 theorem subcomplex_insert_cell [CWComplex C] (E : CWComplex.Subcomplex C)
-    (n : ℕ) (i : CWComplex.cell C n)
+    (n : ℕ) (i : Topology.CWComplex.cell C n)
     (hfront : CWComplex.cellFrontier n i ⊆ (E : Set X)) :
     ∃ F : CWComplex.Subcomplex C, (E : Set X) ⊆ (F : Set X) ∧
       CWComplex.closedCell n i ⊆ (F : Set X) ∧
@@ -43,7 +43,7 @@ theorem subcomplex_insert_cell [CWComplex C] (E : CWComplex.Subcomplex C)
 on the dimension, using that a cell's frontier is covered by finitely many closed
 cells of lower dimension. -/
 theorem closedCell_subset_finite_subcomplex [CWComplex C] (n : ℕ)
-    (i : CWComplex.cell C n) :
+    (i : Topology.CWComplex.cell C n) :
     ∃ F : CWComplex.Subcomplex C, CWComplex.Finite (F : Set X) ∧
       CWComplex.closedCell n i ⊆ (F : Set X) :=
   sorry
@@ -52,7 +52,7 @@ theorem closedCell_subset_finite_subcomplex [CWComplex C] (n : ℕ)
 open cell meets a compact `K ⊆ C` is finite. -/
 theorem finite_cells_meeting_compact [CWComplex C] {K : Set X} (hKC : K ⊆ C)
     (hK : IsCompact K) :
-    {p : Σ n, CWComplex.cell C n | (CWComplex.openCell p.1 p.2 ∩ K).Nonempty}.Finite :=
+    {p : Σ n, Topology.CWComplex.cell C n | (CWComplex.openCell p.1 p.2 ∩ K).Nonempty}.Finite :=
   sorry
 
 /-- **Compact subspace lies in a finite subcomplex.** Let `C` be a CW complex in a
