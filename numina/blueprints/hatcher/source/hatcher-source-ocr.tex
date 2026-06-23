@@ -1,1 +1,292 @@
-% OCR pending for Hatcher
+\documentclass{article}
+\usepackage{amsmath, amssymb, amsthm}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+\begin{document}
+
+\section*{Appendix}
+
+\subsection*{Topology of Cell Complexes}
+
+Here we collect a number of basic topological facts about CW complexes for convenient reference. A few related facts about manifolds are also proved.
+
+Let us first recall from Chapter 0 that a CW complex is a space $X$ constructed in the following way:
+
+\begin{enumerate}
+\item Start with a discrete set $X^0$, the 0-cells of $X$.
+\item Inductively, form the $n$-skeleton $X^n$ from $X^{n-1}$ by attaching $n$-cells $e_\alpha^n$ via maps $\varphi_\alpha: S^{n-1} \to X^{n-1}$. This means that $X^n$ is the quotient space of $X^{n-1} \coprod_\alpha D_\alpha^n$ under the identifications $x \sim \varphi_\alpha(x)$ for $x \in \partial D_\alpha^n$. The cell $e_\alpha^n$ is the homeomorphic image of $D_\alpha^n - \partial D_\alpha^n$ under the quotient map.
+\item $X = \bigcup_n X^n$ with the weak topology: A set $A \subset X$ is open (or closed) iff $A \cap X^n$ is open (or closed) in $X^n$ for each $n$.
+\end{enumerate}
+
+Note that condition (3) is superfluous when $X$ is finite-dimensional, so that $X = X^n$ for some $n$. For if $A$ is open in $X = X^n$, the definition of the quotient topology on $X^n$ implies that $A \cap X^{n-1}$ is open in $X^{n-1}$, and then by the same reasoning $A \cap X^{n-2}$ is open in $X^{n-2}$, and similarly for all the skeleta $X^{n-i}$.
+
+Each cell $e_\alpha^n$ has its \textbf{characteristic map} $\Phi_\alpha$, which is by definition the composition $D_\alpha^n \hookrightarrow X^{n-1} \coprod_\alpha D_\alpha^n \to X^n \hookrightarrow X$. This is continuous since it is a composition of continuous maps, the inclusion $X^n \hookrightarrow X$ being continuous by (3). The restriction of $\Phi_\alpha$ to the interior of $D_\alpha^n$ is a homeomorphism onto $e_\alpha^n$.
+
+An alternative way to describe the topology on $X$ is to say that a set $A \subset X$ is open (or closed) iff $\Phi_\alpha^{-1}(A)$ is open (or closed) in $D_\alpha^n$ for each characteristic map $\Phi_\alpha$. In one direction this follows from continuity of the $\Phi_\alpha$'s, and in the other direction, suppose $\Phi_\alpha^{-1}(A)$ is open in $D_\alpha^n$ for each $\Phi_\alpha$, and suppose by induction on $n$ that $A \cap X^{n-1}$ is open in $X^{n-1}$. Then since $\Phi_\alpha^{-1}(A)$ is open in $D_\alpha^n$ for all $\alpha$, $A \cap X^n$ is open in $X^n$ by the definition of the quotient topology on $X^n$. Hence by (3), $A$ is open in $X$.
+
+A consequence of this characterization of the topology on $X$ is that $X$ is a quotient space of $\coprod_{n,\alpha} D_\alpha^n$.
+
+\begin{example}[$\Delta$-Complexes]
+In \S2.1 we defined a $\Delta$-complex $X$ to be a quotient space of a disjoint union of simplices under identifications of some of their faces via the canonical linear homeomorphisms preserving orderings of vertices. We observed that each $n$-simplex of $X$ comes with a canonical map $\sigma_\alpha: \Delta^n \to X$ whose restriction to the interior of $\Delta^n$ is a homeomorphism with image a cell $e_\alpha^n$. Now let us check that these cells are the cells of a CW structure on $X$ with the $\sigma_\alpha$'s as characteristic maps.
+
+To simplify the argument, let us modify the collection of disjoint simplices from which $X$ is built. First, enlarge this set of simplices by including copies of all their lower-dimensional faces, adjoining also the identifications that match these new simplices with the corresponding faces of the old simplices. Having done this, we then eliminate redundancy in the collection of disjoint simplices by identifying any two simplices of the same dimension that become identified in $X$. As a result of these changes we now have $X$ constructed from a disjoint union of simplices with one $n$-simplex for each cell $e_{\alpha}^{n}$ of $X$.
+
+Let $X^k$ be the union of all cells $e_{\alpha}^{n}$ of $X$ with $n \leq k$. Assume inductively that we have verified that $X^{k-1}$ is a CW complex. Note that for each cell $e_{\alpha}^{k}$, the restriction $\varphi_{\alpha}$ of its canonical map $\sigma_{\alpha}: \Delta^k \rightarrow X$ to $\partial \Delta^k$ is a continuous map to $X^{k-1}$ since on each $(k-1)$-dimensional face of $\Delta^k$ it is a characteristic map $\sigma_{\beta}$ of a cell $e_{\beta}^{k-1}$ of $X^{k-1}$. Then $X^k$ is a quotient of the disjoint union of $X^{k-1}$ with the various $k$-simplices from which $X$ is formed, namely the quotient obtained by attaching the cells $e_{\alpha}^{k}$ of $X$ to $X^{k-1}$ via the $\varphi_{\alpha}$'s. Thus $X^k$ is also a CW complex. Since $X$ has the weak topology with respect to the $X^{k}$'s, it is a CW complex as well.
+\end{example}
+
+A \textbf{subcomplex} of a CW complex $X$ is a subspace $A \subset X$ which is a union of cells of $X$, such that the closure of each cell in $A$ is contained in $A$. Thus for each cell in $A$, the image of its attaching map is contained in $A$, so $A$ is itself a CW complex. Its CW complex topology is the same as the topology induced from $X$, as one sees by noting inductively that the two topologies agree on $A^n = A \cap X^n$. It is easy to see by induction over skeleta that a subcomplex is a closed subspace. Conversely, a subcomplex could be defined as a closed subspace which is a union of cells.
+
+A finite CW complex, that is, one with only finitely many cells, is compact since attaching a single cell preserves compactness. A sort of converse to this is:
+
+\begin{proposition}
+A compact subspace of a CW complex is contained in a finite subcomplex.
+\end{proposition}
+
+\begin{proof}
+First we show that a compact set $C$ in a CW complex $X$ can meet only finitely many cells of $X$. Suppose on the contrary that there is an infinite sequence of points $x_i \in C$ all lying in distinct cells. Then the set $S = \{x_1, x_2, \cdots\}$ is closed in $X$. Namely, assuming $S \cap X^{n-1}$ is closed in $X^{n-1}$ by induction on $n$, then for each cell $e_{\alpha}^{n}$ of $X$, $\varphi_{\alpha}^{-1}(S)$ is closed in $\partial D_{\alpha}^{n}$, and $\Phi_{\alpha}^{-1}(S)$ consists of at most one more point in $D_{\alpha}^{n}$, so $\Phi_{\alpha}^{-1}(S)$ is closed in $D_{\alpha}^{n}$. Therefore $S \cap X^n$ is closed in $X^n$ for each $n$, hence $S$ is closed in $X$. The same argument shows that any subset of $S$ is closed, so $S$ has the discrete topology. But it is compact, being a closed subset of the compact set $C$. Therefore $S$ must be finite, a contradiction.
+
+Since $C$ is contained in a finite union of cells, it suffices to show that a finite union of cells is contained in a finite subcomplex of $X$. A finite union of finite subcomplexes is again a finite subcomplex, so this reduces to showing that a single cell $e_{\alpha}^{n}$ is contained in a finite subcomplex. The image of the attaching map $\varphi_{\alpha}$ for $e_{\alpha}^{n}$ is compact, hence by induction on dimension this image is contained in a finite subcomplex $A \subset X^{n-1}$. So $e_{\alpha}^{n}$ is contained in the finite subcomplex $A \cup e_{\alpha}^{n}$.
+\end{proof}
+
+Now we can explain the mysterious letters `CW,' which refer to the following two properties satisfied by CW complexes:
+
+\begin{enumerate}
+\item Closure-finiteness: The closure of each cell meets only finitely many other cells. This follows from the preceding proposition since the closure of a cell is compact, being the image of a characteristic map.
+\item Weak topology: A set is closed iff it meets the closure of each cell in a closed set. For if a set meets the closure of each cell in a closed set, it pulls back to a closed set under each characteristic map, hence is closed by an earlier remark.
+\end{enumerate}
+
+In J.H.C. Whitehead's original definition of CW complexes these two properties played a more central role. The following proposition contains essentially this definition.
+
+\begin{proposition}
+Given a Hausdorff space $X$ and a family of maps $\Phi_{\alpha}: D_{\alpha}^{n} \to X$, then these maps are the characteristic maps of a CW complex structure on $X$ iff:
+\begin{enumerate}
+\item[(i)] Each $\Phi_{\alpha}$ is injective on $\operatorname{int} D_{\alpha}^{n}$, hence $\Phi_{\alpha}$ restricts to a homeomorphism from $\operatorname{int} D_{\alpha}^{n}$ onto a cell $e_{\alpha}^{n} \subset X$. All these cells are disjoint, and their union is $X$.
+\item[(ii)] For each cell $e_{\alpha}^{n}$, $\Phi_{\alpha}(\partial D_{\alpha}^{n})$ is contained in the union of a finite number of cells of dimension less than $n$.
+\item[(iii)] A subset of $X$ is closed iff it meets the closure of each cell of $X$ in a closed set.
+\end{enumerate}
+\end{proposition}
+
+The `hence' in (i) follows from the fact that $\Phi_{\alpha}$ maps the compact set $D_{\alpha}^{n}$ to a Hausdorff space, so since $\Phi_{\alpha}$ takes compact sets to compact sets, it takes closed sets to closed sets, which means that $\Phi_{\alpha}^{-1}: e_{\alpha}^{n} \to \operatorname{int} D_{\alpha}^{n}$ is continuous. By the same compactness argument, condition (iii) can be restated as saying that a set $C \subset X$ is closed iff $\Phi_{\alpha}^{-1}(C)$ is closed in $D_{\alpha}^{n}$ for all $\alpha$. In particular, (iii) is automatic if there are only finitely many cells since the projection $\coprod_{\alpha} D_{\alpha}^{n} \to X$ is a map from a compact space onto a Hausdorff space, hence is a quotient map.
+
+One might wonder whether the finiteness hypothesis in (ii) is necessary, and indeed it is. For an example where all the other conditions except this are satisfied, take $X$ to be $D^{2}$ with its interior as a 2-cell and each point of $\partial D^{2}$ as a 0-cell. The identity map of $D^{2}$ serves as the $\Phi_{\alpha}$ for the 2-cell. Condition (iii) is satisfied since it is a nontrivial condition only for the 2-cell.
+
+\begin{proof}
+We have already taken care of the `only if' implication. For the converse, suppose inductively that $X^{n-1}$, the union of all cells of dimension less than $n$, is a CW complex with the appropriate $\Phi_{\alpha}$'s as characteristic maps. The induction can start with $X^{-1} = \emptyset$. Let $f: X^{n-1} \coprod_{\alpha} D_{\alpha}^{n} \to X^{n}$ be given by the inclusion on $X^{n-1}$ and the maps $\Phi_{\alpha}$ for all the $n$-cells of $X$. This is a continuous surjection, and if we can show it is a quotient map, then $X^{n}$ will be obtained from $X^{n-1}$ by attaching the $n$-cells $e_{\alpha}^{n}$.
+
+Thus if $C \subset X^n$ is such that $f^{-1}(C)$ is closed, we need to show that $C \cap \bar{e}_\beta^m$ is closed for all cells $e_\beta^m$ of $X$, the bar denoting closure.
+
+There are three cases. If $m < n$ then $f^{-1}(C)$ closed implies $C \cap X^{n-1}$ closed, hence $C \cap \bar{e}_\beta^m$ is closed since $\bar{e}_\beta^m \subset X^{n-1}$. If $m = n$ then $e_\beta^m$ is one of the cells $e_\alpha^n$, so $f^{-1}(C)$ closed implies $f^{-1}(C) \cap D_\alpha^n$ is closed, hence compact, hence its image $C \cap \bar{e}_\alpha^n$ under $f$ is compact and therefore closed. Finally there is the case $m > n$. Then $C \subset X^n$ implies $C \cap \bar{e}_\beta^m \subset \Phi_\beta(\partial D_\beta^m)$. The latter space is contained in a finite union of $\bar{e}_\gamma^\ell$'s with $\ell < m$. By induction on $m$, each $C \cap \bar{e}_\gamma^\ell$ is closed. Hence the intersection of $C$ with the union of the finite collection of $\bar{e}_\gamma^\ell$'s is closed. Intersecting this closed set with $\bar{e}_\beta^m$, we conclude that $C \cap \bar{e}_\beta^m$ is closed.
+
+It remains only to check that $X$ has the weak topology with respect to the $X^n$'s, that is, a set in $X$ is closed iff it intersects each $X^n$ in a closed set. The preceding argument with $C = X^n$ shows that $X^n$ is closed, so a closed set intersects each $X^n$ in a closed set. Conversely, if a set $C$ intersects $X^n$ in a closed set, then $C$ intersects each $\bar{e}_\alpha^n$ in a closed set, so $C$ is closed in $X$ by (iii).
+\end{proof}
+
+Next we describe a convenient way of constructing open neighborhoods $N_\varepsilon(A)$ of subsets $A$ of a CW complex $X$. The construction is inductive over the skeleta $X^n$, so suppose we have already constructed $N_\varepsilon^n(A)$, a neighborhood of $A \cap X^n$ in $X^n$, starting the process with $N_\varepsilon^0(A) = A \cap X^0$. Then we define $N_\varepsilon^{n+1}(A)$ by specifying its preimage under the characteristic map $\Phi_\alpha: D^{n+1} \to X$ of each cell $e_\alpha^{n+1}$, namely, $\Phi_\alpha^{-1}(N_\varepsilon^{n+1}(A))$ is the union of two parts: an open $\varepsilon$-neighborhood of $\Phi_\alpha^{-1}(A) - \partial D^{n+1}$ in $D^{n+1} - \partial D^{n+1}$, and a product $(1 - \varepsilon, 1] \times \Phi_\alpha^{-1}(N_\varepsilon^n(A))$ with respect to `spherical' coordinates $(r, \theta)$ in $D^{n+1}$, where $r \in [0, 1]$ is the radial coordinate and $\theta$ lies in $\partial D^{n+1} = S^n$. The number $\varepsilon = \varepsilon_\alpha > 0$ is allowed to depend on the cell $e_\alpha^{n+1}$. Then we define $N_\varepsilon(A) = \bigcup_n N_\varepsilon^n(A)$. This is an open set in $X$ since it pulls back to an open set under each characteristic map.
+
+\begin{proposition}
+CW complexes are normal, and in particular, Hausdorff.
+\end{proposition}
+
+\begin{proof}
+Points are closed in a CW complex $X$ since they pull back to closed sets under all characteristic maps $\Phi_\alpha$. For disjoint closed sets $A$ and $B$ in $X$, we show that $N_\varepsilon(A)$ and $N_\varepsilon(B)$ are disjoint for small enough $\varepsilon_\alpha$'s. In the inductive process for building these open sets, assume $N_\varepsilon^n(A)$ and $N_\varepsilon^n(B)$ have been chosen to be disjoint. For a characteristic map $\Phi_\alpha: D^{n+1} \to X$, observe that $\Phi_\alpha^{-1}(N_\varepsilon^n(A))$ and $\Phi_\alpha^{-1}(B)$ are a positive distance apart, since otherwise by compactness we would have a sequence in $\Phi_\alpha^{-1}(B)$ converging to a point of $\Phi_\alpha^{-1}(B)$ in $\partial D^{n+1}$ of distance zero from $\Phi_\alpha^{-1}(N_\varepsilon^n(A))$, but this is impossible since $\Phi_\alpha^{-1}(N_\varepsilon^n(B))$ is a neighborhood of $\Phi_\alpha^{-1}(B) \cap \partial D^{n+1}$ in $\partial D^{n+1}$ disjoint from $\Phi_\alpha^{-1}(N_\varepsilon^n(A))$. Similarly, $\Phi_\alpha^{-1}(N_\varepsilon^n(B))$ and $\Phi_\alpha^{-1}(A)$ are a positive distance apart. Also, $\Phi_\alpha^{-1}(A)$ and $\Phi_\alpha^{-1}(B)$ are a positive distance apart. So a small enough $\varepsilon_\alpha$ will make $\Phi_\alpha^{-1}(N_\varepsilon^{n+1}(A))$ disjoint from $\Phi_\alpha^{-1}(N_\varepsilon^{n+1}(B))$ in $D^{n+1}$.
+\end{proof}
+
+\begin{proposition}
+Each point in a CW complex has arbitrarily small contractible open neighborhoods, so CW complexes are locally contractible.
+\end{proposition}
+
+\begin{proof}
+Given a point $x$ in a CW complex $X$ and a neighborhood $U$ of $x$ in $X$, we can choose the $\varepsilon_{\alpha}$'s small enough so that $N_{\varepsilon}(x) \subset U$ by requiring that the closure of $N_{\varepsilon}^{n}(x)$ be contained in $U$ for each $n$. It remains to see that $N_{\varepsilon}(x)$ is contractible. If $x \in X^{m} - X^{m-1}$ and $n > m$ we can construct a deformation retraction of $N_{\varepsilon}^{n}(x)$ onto $N_{\varepsilon}^{n-1}(x)$ by sliding outward along radial segments in cells $e_{\beta}^{n}$, the images under the characteristic maps $\Phi_{\beta}$ of radial segments in $D^{n}$. A deformation retraction of $N_{\varepsilon}(x)$ onto $N_{\varepsilon}^{m}(x)$ is then obtained by performing the deformation retraction of $N_{\varepsilon}^{n}(x)$ onto $N_{\varepsilon}^{n-1}(x)$ during the $t$-interval $[1/2^{n}, 1/2^{n-1}]$, points of $N_{\varepsilon}^{n}(x) - N_{\varepsilon}^{n-1}(x)$ being stationary outside this $t$-interval. Finally, $N_{\varepsilon}^{m}(x)$ is an open ball about $x$, and so deformation retracts onto $x$.
+\end{proof}
+
+In particular, CW complexes are locally path-connected. So a CW complex is path-connected iff it is connected.
+
+\begin{proposition}
+For a subcomplex $A$ of a CW complex $X$, the open neighborhood $N_{\varepsilon}(A)$ deformation retracts onto $A$ if $\varepsilon_{\alpha} < 1$ for all $\alpha$.
+\end{proposition}
+
+\begin{proof}
+In each cell of $X - A$, $N_{\varepsilon}(A)$ is a product neighborhood of the boundary of this cell, so a deformation retraction of $N_{\varepsilon}(A)$ onto $A$ can be constructed just as in the previous proof.
+\end{proof}
+
+Note that for subcomplexes $A$ and $B$ of $X$, we have $N_{\varepsilon}(A) \cap N_{\varepsilon}(B) = N_{\varepsilon}(A \cap B)$. This implies for example that the van Kampen theorem and Mayer-Vietoris sequences hold for decompositions $X = A \cup B$ into subcomplexes $A$ and $B$ as well as into open sets $A$ and $B$.
+
+A map $f: X \to Y$ with domain a CW complex is continuous iff its restrictions to the closures $\overline{e}_{\alpha}^{n}$ of all cells $e_{\alpha}^{n}$ are continuous, and it is useful to know that the same is true for homotopies $f_{t}: X \to Y$. With this objective in mind, let us introduce a little terminology. A topological space $X$ is said to be \textbf{generated} by a collection of subspaces $X_{\alpha}$ if $X = \bigcup_{\alpha} X_{\alpha}$ and a set $A \subset X$ is closed iff $A \cap X_{\alpha}$ is closed in $X_{\alpha}$ for each $\alpha$. Equivalently, we could say `open' instead of `closed' here, but `closed' is more convenient for our present purposes. As noted earlier, though not in these words, a CW complex $X$ is generated by the closures $\overline{e}_{\alpha}^{n}$ of its cells $e_{\alpha}^{n}$. Since every finite subcomplex of $X$ is a finite union of closures $\overline{e}_{\alpha}^{n}$, $X$ is also generated by its finite subcomplexes. It follows that $X$ is also generated by its compact subspaces, or more briefly, $X$ is \textbf{compactly generated}.
+
+Proposition A.15 later in the Appendix asserts that if $X$ is a compactly generated Hausdorff space and $Z$ is locally compact, then $X \times Z$, with the product topology, is compactly generated. In particular, $X \times I$ is compactly generated if $X$ is a CW complex.
+
+Since every compact set in $X \times I$ is contained in the product of a compact subspace of $X$ with $I$, hence in the product of a finite subcomplex of $X$ with $I$, such product subspaces also generate $X \times I$. Since such a product subspace is a finite union of products $\overline{e}_{\alpha}^{n} \times I$, it is also true that $X \times I$ is generated by its subspaces $\overline{e}_{\alpha}^{n} \times I$. This implies that a homotopy $F: X \times I \to Y$ is continuous iff its restrictions to the subspaces $\overline{e}_{\alpha}^{n} \times I$ are continuous, which is the statement we were seeking.
+
+\subsection*{Products of CW Complexes}
+
+There are some unexpected point-set-topological subtleties that arise with products of CW complexes. As we shall show, the product of two CW complexes does have a natural CW structure, but its topology is in general finer, with more open sets, than the product topology. However, the distinctions between the two topologies are rather small, and indeed nonexistent in most cases of interest, so there is no real problem for algebraic topology.
+
+Given a space $X$ and a collection of subspaces $X_{\alpha}$ whose union is $X$, these subspaces generate a possibly finer topology on $X$ by defining a set $A \subset X$ to be open iff $A \cap X_{\alpha}$ is open in $X_{\alpha}$ for all $\alpha$. The axioms for a topology are easily verified for this definition. In case $\{X_{\alpha}\}$ is the collection of compact subsets of $X$, we write $X_{c}$ for this new compactly generated topology. It is easy to see that $X$ and $X_{c}$ have the same compact subsets, and the two induced topologies on these compact subsets coincide. If $X$ is compact, or even locally compact, then $X = X_{c}$, that is, $X$ is compactly generated.
+
+\begin{theorem}
+For CW complexes $X$ and $Y$ with characteristic maps $\Phi_{\alpha}$ and $\Psi_{\beta}$, the product maps $\Phi_{\alpha} \times \Psi_{\beta}$ are the characteristic maps for a CW complex structure on $(X \times Y)_{c}$. If either $X$ or $Y$ is compact or more generally locally compact, then $(X \times Y)_{c} = X \times Y$. Also, $(X \times Y)_{c} = X \times Y$ if both $X$ and $Y$ have countably many cells.
+\end{theorem}
+
+The simplest example where the two topologies $X \times Y$ and $(X \times Y)_{c}$ differ has $X$ and $Y$ graphs consisting of infinitely many edges emanating from a single vertex, with countably many edges for $X$ and uncountably many for $Y$; see [Dowker 1952].
+
+\begin{proof}
+For the first statement it suffices to check that the three conditions in Proposition A.2 are satisfied when we take the space `$X$' there to be $(X \times Y)_{c}$. The first two conditions are obvious. For the third, which says that $(X \times Y)_{c}$ is generated by the products $\overline{e}_{\alpha}^{m} \times \overline{e}_{\beta}^{n}$, observe that every compact set in $X \times Y$ is contained in the product of its projections onto $X$ and $Y$, and these projections are compact and hence contained in finite subcomplexes of $X$ and $Y$, so the original compact set is contained in a finite union of products $\overline{e}_{\alpha}^{m} \times \overline{e}_{\beta}^{n}$. Hence the products $\overline{e}_{\alpha}^{m} \times \overline{e}_{\beta}^{n}$ generate $(X \times Y)_{c}$.
+
+The second assertion of the theorem is a special case of Proposition A.15, having nothing to do with CW complexes, which says that a product $X \times Y$ is compactly generated if $X$ is compactly generated Hausdorff and $Y$ is locally compact.
+
+For the last statement of the theorem, suppose $X$ and $Y$ each have at most countably many cells. Then there are finite subcomplexes $X_1 \subset X_2 \subset \cdots$ of $X$ with $X = \bigcup_i X_i$, and similarly for $Y$. For an open set $W \subset (X \times Y)_c$ and a point $(a, b) \in W$ we need to find a product $U \times V \subset W$ with $U$ an open neighborhood of $a$ in $X$ and $V$ an open neighborhood of $b$ in $Y$. Suppose inductively that we have a compact product $K_i \times L_i \subset W$ that is a neighborhood of $(a, b)$ in $X_i \times Y_i$. We know such a product $K_i \times L_i$ exists since the two topologies on $X_i \times Y_i$ are the same. We would like to find a compact product neighborhood $K_{i+1} \times L_{i+1} \subset W$ of $K_i \times L_i$ in $X_{i+1} \times Y_{i+1}$. To do this, we first choose for each $x \in K_i$ compact neighborhoods $K_x$ of $x$ in $X_{i+1}$ and $L_x$ of $L_i$ in $Y_{i+1}$ such that $K_x \times L_x \subset W$, using the compactness of $L_i$. By compactness of $K_i$, a finite number of the $K_x$'s cover $K_i$. Let $K_{i+1}$ be the union of these $K_x$'s and let $L_{i+1}$ be the intersection of the corresponding $L_x$'s. This defines the desired $K_{i+1} \times L_{i+1}$. Let $U_i$ be the interior of $K_i$ in $X_i$, so $U_i \subset U_{i+1}$ for each $i$. The union $U = \bigcup_i U_i$ is then open in $X$ since it intersects each $X_i$ in a union of open sets and the $X_i$'s generate $X$. In the same way the $L_i$'s yield an open set $V$ in $Y$, and then $U \times V \subset W$ is a product neighborhood of $(a, b)$ in $X \times Y$.
+\end{proof}
+
+\subsection*{Euclidean Neighborhood Retracts}
+
+At certain places in this book it is desirable to know that a given compact space is a retract of a finite simplicial complex, or equivalently (as we shall see) a retract of a neighborhood in some Euclidean space. For example, this condition occurs in the Lefschetz fixed point theorem, and it was used in the proof of Alexander duality. So let us study this situation in more detail.
+
+\begin{theorem}
+A compact subspace $K$ of $\mathbb{R}^n$ is a retract of some neighborhood iff $K$ is locally contractible in the weak sense that for each $x \in K$ and each neighborhood $U$ of $x$ in $K$ there exists a neighborhood $V \subset U$ of $x$ such that the inclusion $V \hookrightarrow U$ is nullhomotopic.
+\end{theorem}
+
+Note that if $K$ is a retract of some neighborhood, then it is a retract of every smaller neighborhood, just by restriction of the retraction. So it does not matter if we require the neighborhoods to be open. Similarly it does not matter if the neighborhoods $U$ and $V$ in the statement of the theorem are required to be open.
+
+\begin{proof}
+Let us do the harder half first, constructing a retraction of a neighborhood of $K$ onto $K$ under the local contractibility assumption. The first step is to put a CW structure on the open set $X = \mathbb{R}^n - K$, with the size of the cells approaching zero near $K$. Consider the subdivision of $\mathbb{R}^n$ into unit cubes of dimension $n$ with vertices at the points with integer coordinates. Call this collection of cubes $C_0$. For an integer $k > 0$, we can subdivide the cubes of $C_0$ by taking $n$-dimensional cubes of edgelength $1/2^k$ with vertices having coordinates of the form $i/2^k$ for $i \in \mathbb{Z}$. Denote this collection of cubes by $C_k$. Let $A_0 \subset C_0$ be the set of cubes disjoint from $K$, and inductively, let $A_k \subset C_k$ be the set of cubes disjoint from $K$ and not contained in cubes of $A_j$ for $j < k$. The open set $X$ is then the union of all the cubes in the combined collection $A = \bigcup_k A_k$. Note that the collection $A$ is locally finite: Each point of $X$ has a neighborhood meeting only finitely many cubes in $A$, since the point has a positive distance from the closed set $K$.
+
+If two cubes of $A$ intersect, their intersection is an $i$-dimensional face of one of them for some $i < n$. Likewise, when two faces of cubes of $A$ intersect, their intersection is a face of one of them. This implies that the open faces of cubes of $A$ that are minimal with respect to inclusion among such faces form the cells of a CW structure on $X$, since the boundary of such a face is a union of such faces. The vertices of this CW structure are thus the vertices of all the cubes of $A$, and the $n$-cells are the interiors of the cubes of $A$.
+
+Next we define inductively a subcomplex $Z$ of this CW structure on $X$ and a map $r: Z \to K$. The 0-cells of $Z$ are exactly the 0-cells of $X$, and we let $r$ send each 0-cell to the closest point of $K$, or if this is not unique, any one of the closest points of $K$. Assume inductively that $Z^k$ and $r: Z^k \to K$ have been defined. For a cell $e^{k+1}$ of $X$ with boundary in $Z^k$, if the restriction of $r$ to this boundary extends over $e^{k+1}$ then we include $e^{k+1}$ in $Z^{k+1}$ and we let $r$ on $e^{k+1}$ be such an extension that is not too large, say an extension for which the diameter of its image $r(e^{k+1})$ is less than twice the infimum of the diameters for all possible extensions. This defines $Z^{k+1}$ and $r: Z^{k+1} \to K$. At the end of the induction we set $Z = Z^n$.
+
+It remains to verify that by letting $r$ equal the identity on $K$ we obtain a continuous retraction $Z \cup K \to K$, and that $Z \cup K$ contains a neighborhood of $K$. Given a point $x \in K$, let $U$ be a ball in the metric space $K$ centered at $x$. Since $K$ is locally contractible, we can choose a finite sequence of balls in $K$ centered at $x$, of the form $U = U_n \supset V_n \supset U_{n-1} \supset V_{n-1} \supset \cdots \supset U_0 \supset V_0$, each ball having radius equal to some small fraction of the radius of the preceding one, and with $V_i$ contractible in $U_i$. Let $B \subset \mathbb{R}^n$ be a ball centered at $x$ with radius less than half the radius of $V_0$, and let $Y$ be the subcomplex of $X$ formed by the cells whose closures are contained in $B$. Thus $Y \cup K$ contains a neighborhood of $x$ in $\mathbb{R}^n$. By the choice of $B$ and the definition of $r$ on 0-cells we have $r(Y^0) \subset V_0$. Since $V_0$ is contractible in $U_0$, $r$ is defined on the 1-cells of $Y$. Also, $r(Y^1) \subset V_1$ by the definition of $r$ on 1-cells and the fact that $U_0$ is much smaller than $V_1$. Similarly, by induction we have $r$ defined on $Y^i$ with $r(Y^i) \subset V_i$ for all $i$. In particular, $r$ maps $Y$ to $U$. Since $U$ could be arbitrarily small, this shows that extending $r$ by the identity map on $K$ gives a continuous map $r: Z \cup K \to K$. And since $Y \subset Z$, we see that $Z \cup K$ contains a neighborhood of $K$ by the earlier observation that $Y \cup K$ contains a neighborhood of $x$. Thus $r: Z \cup K \to K$ retracts a neighborhood of $K$ onto $K$.
+
+Now for the converse. Since open sets in $\mathbb{R}^n$ are locally contractible, it suffices to show that a retract of a locally contractible space is locally contractible. Let $r: X \to A$ be a retraction and let $U \subset A$ be a neighborhood of a given point $x \in A$. If $X$ is locally contractible, then inside the open set $r^{-1}(U)$ there is a neighborhood $V$ of $x$ that is contractible in $r^{-1}(U)$, say by a homotopy $f_t: V \to r^{-1}(U)$. Then $V \cap A$ is contractible in $U$ via the restriction of the composition $rf_t$.
+\end{proof}
+
+A space $X$ is called a \textbf{Euclidean neighborhood retract} or \textbf{ENR} if for some $n$ there exists an embedding $i: X \hookrightarrow \mathbb{R}^n$ such that $i(X)$ is a retract of some neighborhood in $\mathbb{R}^n$. The preceding theorem implies that the existence of the retraction is independent of the choice of embedding, at least when $X$ is compact.
+
+\begin{corollary}
+A compact space is an ENR iff it can be embedded as a retract of a finite simplicial complex. Hence the homology groups and the fundamental group of a compact ENR are finitely generated.
+\end{corollary}
+
+\begin{proof}
+A finite simplicial complex $K$ with $n$ vertices is a subcomplex of a simplex $\Delta^{n-1}$, and hence embeds in $\mathbb{R}^n$. The preceding theorem then implies that $K$ is a retract of some neighborhood in $\mathbb{R}^n$, so any retract of $K$ is also a retract of such a neighborhood, via the composition of the two retractions. Conversely, let $K$ be a compact space that is a retract of some open neighborhood $U$ in $\mathbb{R}^n$. Since $K$ is compact it is bounded, lying in some large simplex $\Delta^n \subset \mathbb{R}^n$. Subdivide $\Delta^n$, say by repeated barycentric subdivision, so that all simplices of the subdivision have diameter less than the distance from $K$ to the complement of $U$. Then the union of all the simplices in this subdivision that intersect $K$ is a finite simplicial complex that retracts onto $K$ via the restriction of the retraction $U \to K$.
+\end{proof}
+
+\begin{corollary}
+Every compact manifold, with or without boundary, is an ENR.
+\end{corollary}
+
+\begin{proof}
+Manifolds are locally contractible, so it suffices to show that a compact manifold $M$ can be embedded in $\mathbb{R}^k$ for some $k$. If $M$ is not closed, it embeds in the closed manifold obtained from two copies of $M$ by identifying their boundaries. So it suffices to consider the case that $M$ is closed. By compactness there exist finitely many closed balls $B_i^n \subset M$ whose interiors cover $M$, where $n$ is the dimension of $M$. Let $f_i: M \to S^n$ be the quotient map collapsing the complement of the interior of $B_i^n$ to a point. These $f_i$'s are the components of a map $f: M \to (S^n)^m$ which is injective since if $x$ and $y$ are distinct points of $M$ with $x$ in the interior of $B_i^n$, say, then $f_i(x) \neq f_i(y)$. Composing $f$ with an embedding $(S^n)^m \hookrightarrow \mathbb{R}^k$, for example the product of the standard embeddings $S^n \hookrightarrow \mathbb{R}^{n+1}$, we obtain a continuous injection $M \hookrightarrow \mathbb{R}^k$, and this is a homeomorphism onto its image since $M$ is compact.
+\end{proof}
+
+\begin{corollary}
+Every finite CW complex is an ENR.
+\end{corollary}
+
+\begin{proof}
+Since CW complexes are locally contractible, it suffices to show that a finite CW complex can be embedded in some $\mathbb{R}^n$. This is proved by induction on the number of cells. Suppose the CW complex $X$ is obtained from a subcomplex $A$ by attaching a cell $e^k$ via a map $f: S^{k-1} \to A$, and suppose that we have an embedding $A \hookrightarrow \mathbb{R}^m$. Then we can embed $X$ in $\mathbb{R}^k \times \mathbb{R}^m \times \mathbb{R}$ as the union of $D^k \times \{0\} \times \{0\}$, $\{0\} \times A \times \{1\}$, and all line segments joining points $(x, 0, 0)$ and $(0, f(x), 1)$ for $x \in S^{k-1}$.
+\end{proof}
+
+\subsection*{Spaces Dominated by CW Complexes}
+
+We have been considering spaces which are retracts of finite simplicial complexes, and now we show that such spaces have the homotopy type of CW complexes. In fact, we can just as easily prove something a little more general than this. A space $Y$ is said to be \textbf{dominated} by a space $X$ if there are maps $Y \xrightarrow{i} X \xrightarrow{r} Y$ with $ri \simeq \mathbb{1}$. This makes the notion of a retract into something that depends only on the homotopy types of the spaces involved.
+
+\begin{proposition}
+A space dominated by a CW complex is homotopy equivalent to a CW complex.
+\end{proposition}
+
+\begin{proof}
+Recall from \S3.F that the mapping telescope $T(f_1, f_2, \cdots)$ of a sequence of maps $X_1 \xrightarrow{f_1} X_2 \xrightarrow{f_2} X_3 \longrightarrow \cdots$ is the quotient space of $\coprod_i(X_i \times [i, i+1])$ obtained by identifying $(x, i+1) \in X_i \times [i, i+1]$ with $(f(x), i+1) \in X_{i+1} \times [i+1, i+2]$. We shall need the following elementary facts:
+\begin{itemize}
+\item[(1)] $T(f_1, f_2, \cdots) \simeq T(g_1, g_2, \cdots)$ if $f_i \simeq g_i$ for each $i$.
+\item[(2)] $T(f_1, f_2, \cdots) \simeq T(f_2, f_3, \cdots)$.
+\item[(3)] $T(f_1, f_2, \cdots) \simeq T(f_2 f_1, f_4 f_3, \cdots)$.
+\end{itemize}
+
+The second of these is obvious. To prove the other two we will use Proposition 0.18, whose proof applies not just to CW pairs but to any pair $(X_1, A)$ for which there is a deformation retraction of $X_1 \times I$ onto $X_1 \times \{0\} \cup A \times I$. To prove (1) we regard $T(f_1, f_2, \cdots)$ as being obtained from $\coprod_i(X_i \times \{i\})$ by attaching $\coprod_i(X_i \times [i, i+1])$. Then we can obtain $T(g_1, g_2, \cdots)$ by varying the attaching map by homotopy. To prove (3) we view $T(f_1, f_2, \cdots)$ as obtained from the disjoint union of the mapping cylinders $M(f_{2i})$ by attaching $\coprod_i(X_{2i-1} \times [2i-1, 2i])$. By sliding the attachment of $X \times [2i-1, 2i]$ to $X_{2i} \subset M(f_{2i})$ down the latter mapping cylinder to $X_{2i+1}$ we convert $M(f_{2i-1}) \cup M(f_{2i})$ into $M(f_{2i}f_{2i-1}) \cup M(f_{2i})$. This last space deformation retracts onto $M(f_{2i}f_{2i-1})$. Doing this for all $i$ gives the homotopy equivalence in (3).
+
+Now to prove the proposition, suppose that the space $Y$ is dominated by the CW complex $X$ via maps $Y \xrightarrow{i} X \xrightarrow{r} Y$ with $ri \simeq \mathbb{1}$. By (2) and (3) we have $T(ir, ir, \cdots) \simeq T(r, i, r, i, \cdots) \simeq T(i, r, i, r, \cdots) \simeq T(ri, ri, \cdots)$. Since $ri \simeq \mathbb{1}$, $T(ri, ri, \cdots)$ is homotopy equivalent to the telescope of the identity maps $Y \to Y \to Y \to \cdots$, which is $Y \times [0, \infty) \simeq Y$. On the other hand, the map $ir$ is homotopic to a cellular map $f: X \to X$, so $T(ir, ir, \cdots) \simeq T(f, f, \cdots)$, which is a CW complex.
+\end{proof}
+
+One might ask whether a space dominated by a finite CW complex is homotopy equivalent to a finite CW complex. In the simply-connected case this follows from Proposition 4C.1 since such a space has finitely generated homology groups. But there are counterexamples in the general case; see [Wall 1965].
+
+In view of Corollary A.10 the preceding proposition implies:
+
+\begin{corollary}
+A compact manifold is homotopy equivalent to a CW complex.
+\end{corollary}
+
+One could ask more refined questions. For example, do all compact manifolds have CW complex structures, or even simplicial complex structures? Answers here are considerably harder to come by. Restricting attention to closed manifolds for simplicity, the present status of these questions is the following. For manifolds of dimensions less than 4, simplicial complex structures always exist. In dimension 4 there are closed manifolds that do not have simplicial complex structures, while the existence of CW structures is an open question. In dimensions greater than 4, CW structures always exist, but whether simplicial structures always exist is unknown, though it is known that there are $n$-manifolds not having simplicial structures locally isomorphic to any linear simplicial subdivision of $\mathbb{R}^n$, for all $n \geq 4$. For more on these questions, see [Kirby \& Siebenmann 1977] and [Freedman \& Quinn 1990].
+
+\subsection*{Exercises}
+
+\begin{enumerate}
+\item Show that a covering space of a CW complex is also a CW complex, with cells projecting homeomorphically onto cells.
+\item Let $X$ be a CW complex and $x_0$ any point of $X$. Construct a new CW complex structure on $X$ having $x_0$ as a 0-cell, and having each of the original cells a union of the new cells. The latter condition is expressed by saying the new CW structure is a \textbf{subdivision} of the old one.
+\item Show that a CW complex is path-connected iff its 1-skeleton is path-connected.
+\item Show that a CW complex is locally compact iff each point has a neighborhood that meets only finitely many cells.
+\item For a space $X$, show that the identity map $X_c \rightarrow X$ induces an isomorphism on $\pi_1$, where $X_c$ denotes $X$ with the compactly generated topology.
+\end{enumerate}
+
+\subsection*{The Compact-Open Topology}
+
+By definition, the compact-open topology on the space $X^Y$ of maps $f: Y \rightarrow X$ has a subbasis consisting of the sets $M(K, U)$ of mappings taking a compact set $K \subset Y$ to an open set $U \subset X$. Thus a basis for $X^Y$ consists of sets of maps taking a finite number of compact sets $K_i \subset Y$ to open sets $U_i \subset X$. If $Y$ is compact, which is the only case we consider in this book, convergence to $f \in X^Y$ means, loosely speaking, that finer and finer compact covers $\{K_i\}$ of $Y$ are taken to smaller and smaller open covers $\{U_i\}$ of $f(Y)$. One of the main cases of interest in homotopy theory is when $Y = I$, so $X^I$ is the space of paths in $X$. In this case one can check that a system of basic neighborhoods of a path $f: I \rightarrow X$ consists of the open sets $\bigcap_i M(K_i, U_i)$ where the $K_i$'s are a partition of $I$ into nonoverlapping closed intervals and $U_i$ is an open neighborhood of $f(K_i)$.
+
+The compact-open topology is the same as the topology of uniform convergence in many cases:
+
+\begin{proposition}
+If $X$ is a metric space and $Y$ is compact, then the compact-open topology on $X^Y$ is the same as the metric topology defined by the metric $d(f, g) = \sup_{y \in Y} d(f(y), g(y))$.
+\end{proposition}
+
+\begin{proof}
+First we show that every open $\varepsilon$-ball $B_\varepsilon(f)$ about $f \in X^Y$ contains a neighborhood of $f$ in the compact-open topology. Since $f(Y)$ is compact, it is covered by finitely many balls $B_{\varepsilon/3}(f(y_i))$. Let $K_i \subset Y$ be the closure of $f^{-1}(B_{\varepsilon/3}(f(y_i)))$, so $K_i$ is compact, $Y = \bigcup_i K_i$, and $f(K_i) \subset B_{\varepsilon/2}(f(y_i)) = U_i$, hence $f \in \bigcap_i M(K_i, U_i)$. To show that $\bigcap_i M(K_i, U_i) \subset B_\varepsilon(f)$, suppose that $g \in \bigcap_i M(K_i, U_i)$. For any $y \in Y$, say $y \in K_i$, we have $d(g(y), f(y_i)) < \varepsilon/2$ since $g(K_i) \subset U_i$. Likewise we have $d(f(y), f(y_i)) < \varepsilon/2$, so $d(f(y), g(y)) \leq d(f(y), f(y_i)) + d(g(y), f(y_i)) < \varepsilon$. Since $y$ was arbitrary, this shows $g \in B_\varepsilon(f)$.
+
+Conversely, we show that for each open set $M(K, U)$ and each $f \in M(K, U)$ there is a ball $B_\varepsilon(f) \subset M(K, U)$. Since $f(K)$ is compact, it has a distance $\varepsilon > 0$ from the complement of $U$. Then $d(f, g) < \varepsilon/2$ implies $g(K) \subset U$ since $g(K)$ is contained in an $\varepsilon/2$-neighborhood of $f(K)$. So $B_{\varepsilon/2}(f) \subset M(K, U)$.
+\end{proof}
+
+The next proposition contains the essential properties of the compact-open topology from the viewpoint of algebraic topology.
+
+\begin{proposition}
+If $Y$ is locally compact, then:
+\begin{enumerate}
+\item[(a)] The evaluation map $e: X^Y \times Y \rightarrow X$, $e(f, y) = f(y)$, is continuous.
+\item[(b)] A map $f: Y \times Z \rightarrow X$ is continuous iff the map $\hat{f}: Z \rightarrow X^Y$, $\hat{f}(z)(y) = f(y, z)$, is continuous.
+\end{enumerate}
+\end{proposition}
+
+In particular, part (b) provides the point-set topology justifying the adjoint relation $\langle \Sigma X, Y \rangle = \langle X, \Omega Y \rangle$ in \S4.3, since it implies that a map $\Sigma X \rightarrow Y$ is continuous iff the associated map $X \rightarrow \Omega Y$ is continuous, and similarly for homotopies of such maps. Namely, think of a basepoint-preserving map $\Sigma X \rightarrow Y$ as a map $f: I \times X \rightarrow Y$ taking $\partial I \times X \cup \{x_0\} \times I$ to the basepoint of $Y$, so the associated map $\hat{f}: X \rightarrow Y^I$ has image in the subspace $\Omega Y \subset Y^I$. A homotopy $f_t: \Sigma X \rightarrow Y$ gives a map $F: I \times X \times I \rightarrow Y$ taking $\partial I \times X \times I \cup I \times \{x_0\} \times I$ to the basepoint, with $\hat{F}$ a map $X \times I \rightarrow \Omega Y \subset Y^I$ defining a basepoint-preserving homotopy $\hat{f}_t$.
+
+\begin{proof}
+(a) For $(f, y) \in X^Y \times Y$ let $U \subset X$ be an open neighborhood of $f(y)$. Since $Y$ is locally compact, continuity of $f$ implies there is a compact neighborhood $K \subset Y$ of $y$ such that $f(K) \subset U$. Then $M(K, U) \times K$ is a neighborhood of $(f, y)$ in $X^Y \times Y$ taken to $U$ by $e$, so $e$ is continuous at $(f, y)$.
+
+(b) Suppose $f: Y \times Z \to X$ is continuous. To show continuity of $\hat{f}$ it suffices to show that for a subbasic set $M(K, U) \subset X^Y$, the set $\hat{f}^{-1}(M(K, U)) = \{z \in Z \mid f(K, z) \subset U\}$ is open in $Z$. Let $z \in \hat{f}^{-1}(M(K, U))$. Since $f^{-1}(U)$ is an open neighborhood of the compact set $K \times \{z\}$, there exist open sets $V \subset Y$ and $W \subset Z$ whose product $V \times W$ satisfies $K \times \{z\} \subset V \times W \subset f^{-1}(U)$. So $W$ is a neighborhood of $z$ in $\hat{f}^{-1}(M(K, U))$. (The hypothesis that $Y$ is locally compact is not needed here.)
+
+For the converse half of (b) note that $f$ is the composition $Y \times Z \to Y \times X^Y \to X$ of $\mathbb{1} \times \hat{f}$ and the evaluation map, so part (a) gives the result.
+\end{proof}
+
+\begin{proposition}
+If $X$ is a compactly generated Hausdorff space and $Y$ is locally compact, then the product topology on $X \times Y$ is compactly generated.
+\end{proposition}
+
+\begin{proof}
+First a preliminary observation: A function $f: X \times Y \to Z$ is continuous iff its restrictions $f: C \times Y \to Z$ are continuous for all compact $C \subset X$. For, using (b) of the previous proposition, the first statement is equivalent to $\hat{f}: X \to Z^Y$ being continuous and the second statement is equivalent to $\hat{f}: C \to Z^Y$ being continuous for all compact $C \subset X$. Since $X$ is compactly generated, the latter two statements are equivalent.
+
+To prove the proposition we just need to show the identity map $X \times Y \to (X \times Y)_c$ is continuous. By the previous paragraph, this is equivalent to continuity of the inclusion maps $C \times Y \to (X \times Y)_c$ for all compact $C \subset X$. Since $Y$ is locally compact, it is compactly generated, and $C$ is compact Hausdorff hence locally compact, so the same reasoning shows that continuity of $C \times Y \to (X \times Y)_c$ is equivalent to continuity of $C \times C' \to (X \times Y)_c$ for all compact $C' \subset Y$. But on the compact set $C \times C'$, the two topologies on $X \times Y$ agree, so we are done. (This proof is from [Dugundji 1966].)
+\end{proof}
+
+\begin{proposition}
+The map $X^{Y \times Z} \to (X^Y)^Z$, $f \mapsto \hat{f}$, is a homeomorphism if $Y$ is locally compact Hausdorff and $Z$ is Hausdorff.
+\end{proposition}
+
+\begin{proof}
+First we show that a subbasis for $X^{Y \times Z}$ is formed by the sets $M(A \times B, U)$ as $A$ and $B$ range over compact sets in $Y$ and $Z$ respectively and $U$ ranges over open sets in $X$. Given a compact $K \subset Y \times Z$ and $f \in M(K, U)$, let $K_Y$ and $K_Z$ be the projections of $K$ onto $Y$ and $Z$. Then $K_Y \times K_Z$ is compact Hausdorff, hence normal, so for each point $k \in K$ there are compact sets $A_k \subset Y$ and $B_k \subset Z$ such that $A_k \times B_k$ is a compact neighborhood of $k$ in $f^{-1}(U) \cap (K_Y \times K_Z)$. By compactness of $K$ a finite number of the products $A_k \times B_k$ cover $K$. Discarding the others, we then have $f \in \bigcap_k M(A_k \times B_k, U) \subset M(K, U)$, which shows that the sets $M(A \times B, U)$ form a subbasis.
+
+Under the bijection $X^{Y \times Z} \to (X^Y)^Z$ these sets $M(A \times B, U)$ correspond to the sets $M(B, M(A, U))$, so it will suffice to show the latter sets form a subbasis for $(X^Y)^Z$. We show more generally that $X^Y$ has as a subbasis the sets $M(K, V)$ as $V$ ranges over a subbasis for $X$ and $K$ ranges over compact sets in $Y$, assuming that $Y$ is Hausdorff.
+
+Given $f \in M(K, U)$, write $U$ as a union of basic sets $U_\alpha$ with each $U_\alpha$ an intersection of finitely many sets $V_{\alpha,j}$ of the given subbasis. The cover of $K$ by the open sets $f^{-1}(U_\alpha)$ has a finite subcover, say by the open sets $f^{-1}(U_i)$. Since $K$ is compact Hausdorff, hence normal, we can write $K$ as a union of compact subsets $K_i$ with $K_i \subset f^{-1}(U_i)$. Then $f$ lies in $M(K_i, U_i) = M(K_i, \bigcap_j V_{ij}) = \bigcap_j M(K_i, V_{ij})$ for each $i$. Hence $f$ lies in $\bigcap_{i,j} M(K_i, V_{ij}) = \bigcap_i M(K_i, U_i) \subset M(K, U)$. Since $\bigcap_{i,j} M(K_i, V_{ij})$ is a finite intersection, this shows that the sets $M(K, V)$ form a subbasis for $(X^Y)^Z$.
+\end{proof}
+
+\end{document}
