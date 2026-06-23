@@ -22,6 +22,7 @@ distance is the pointwise supremum.
     \label{lem:dist-le}
     \lean{Hatcher.dist_le}
     \leanfile{AlgebraicTopology/Hatcher.lean}
+    \leanok
     Let $X$ be a compact space and $Y$ a metric space. For $f, g \in C(X, Y)$
     and a real number $C \ge 0$, we have $d(f, g) \le C$ if and only if
     $d(f(x), g(x)) \le C$ for every $x \in X$.
@@ -40,6 +41,7 @@ distance is the pointwise supremum.
     \lean{Hatcher.dist_eq_iSup}
     \leanfile{AlgebraicTopology/Hatcher.lean}
     \uses{lem:dist-le}
+    \leanok
     Let $X$ be a nonempty compact space and $Y$ a metric space. For
     $f, g \in C(X, Y)$,
     \[
@@ -64,6 +66,7 @@ distance is the pointwise supremum.
     \label{thm:eval-continuous}
     \lean{Hatcher.eval_continuous}
     \leanfile{AlgebraicTopology/Hatcher.lean}
+    \leanok
     Let $Y$ be a locally compact space and $X$ any space. The evaluation map
     \[
         e : C(Y, X) \times Y \to X, \qquad e(f, y) = f(y),
@@ -83,6 +86,7 @@ distance is the pointwise supremum.
     \lean{Hatcher.uncurry_continuous}
     \leanfile{AlgebraicTopology/Hatcher.lean}
     \uses{thm:eval-continuous}
+    \leanok
     Let $Y$ be locally compact and let $F : Z \to C(Y, X)$ be continuous. Then
     the uncurried map $\widehat{F} : Z \times Y \to X$, $\widehat{F}(z, y) =
     F(z)(y)$, is continuous.
@@ -100,6 +104,7 @@ distance is the pointwise supremum.
     \label{lem:curry-cont}
     \lean{Hatcher.curry_continuous}
     \leanfile{AlgebraicTopology/Hatcher.lean}
+    \leanok
     Let $g : Z \times Y \to X$ be continuous. Then the adjoint map
     $\check{g} : Z \to C(Y, X)$, $\check{g}(z)(y) = g(z, y)$, is continuous.
     No local compactness hypothesis is needed.
@@ -117,6 +122,7 @@ distance is the pointwise supremum.
     \lean{Hatcher.exponential_law}
     \leanfile{AlgebraicTopology/Hatcher.lean}
     \uses{lem:uncurry-cont, lem:curry-cont}
+    \leanok
     Let $Y$ be locally compact. A map $g : Z \times Y \to X$ is continuous if
     and only if its adjoint $\check{g} : Z \to C(Y, X)$,
     $\check{g}(z)(y) = g(z, y)$, is continuous.
@@ -136,6 +142,7 @@ distance is the pointwise supremum.
     \lean{Hatcher.continuous_curry}
     \leanfile{AlgebraicTopology/Hatcher.lean}
     \uses{lem:curry-cont, thm:eval-continuous}
+    \leanok
     Let $Y$ and $Z$ be locally compact. The currying map
     \[
         \mathrm{curry} : C(Y \times Z, X) \to C(Y, C(Z, X))
@@ -156,6 +163,7 @@ distance is the pointwise supremum.
     \lean{Hatcher.continuous_uncurry}
     \leanfile{AlgebraicTopology/Hatcher.lean}
     \uses{lem:curry-cont, thm:eval-continuous}
+    \leanok
     Let $Y$ and $Z$ be locally compact. The uncurrying map
     \[
         \mathrm{uncurry} : C(Y, C(Z, X)) \to C(Y \times Z, X)
@@ -175,6 +183,7 @@ distance is the pointwise supremum.
     \lean{Hatcher.curryHomeo}
     \leanfile{AlgebraicTopology/Hatcher.lean}
     \uses{lem:continuous-curry, lem:continuous-uncurry}
+    \leanok
     Let $Y$ and $Z$ be locally compact spaces and $X$ any space. The currying
     map
     \[
