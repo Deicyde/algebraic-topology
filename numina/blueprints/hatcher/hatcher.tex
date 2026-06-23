@@ -209,27 +209,108 @@ contains; it is \emph{finite} when it has finitely many cells.
 
 \subsection{Compactness (Proposition A.1)}
 
+The proof of Proposition~A.1 is decomposed into four steps over Mathlib's
+subcomplex API: a finite union of finite subcomplexes is a finite subcomplex
+(Lemma~\ref{lem:cw-finite-union}); a finite subcomplex containing the frontier
+of a cell can be enlarged to contain the whole closed cell
+(Lemma~\ref{lem:cw-insert-cell}); every closed cell lies in a finite subcomplex
+(Lemma~\ref{lem:cw-cell-finite-subcomplex}); and a compact subset meets only
+finitely many open cells (Lemma~\ref{lem:cw-compact-finite-cells}).
+
+\begin{lemma}[Finite union of finite subcomplexes]
+    \label{lem:cw-finite-union}
+    \lean{HatcherCW.iUnion_subcomplex_finite}
+    \leanfile{AlgebraicTopology/HatcherCW.lean}
+    Let $C$ be a CW complex in a Hausdorff space $X$. Given a finite family
+    $(E_i)_{i \in s}$ of finite subcomplexes of $C$, there is a finite
+    subcomplex $G$ of $C$ with $E_i \subseteq G$ for every $i \in s$.
+\end{lemma}
+\begin{proof}
+    The underlying set of a subcomplex is the union of its open cells and is
+    closed, and the cell-index of a union of two subcomplexes is the union of
+    their cell-indices. Hence the pointwise union $E \cup F$ of two subcomplexes
+    is again a subcomplex, whose cells are the union of those of $E$ and $F$; if
+    both are finite, so is the union. Iterating over the finite index set $s$
+    gives the required finite subcomplex $G$.
+\end{proof}
+
+\begin{lemma}[Enlarging a subcomplex by one cell]
+    \label{lem:cw-insert-cell}
+    \lean{HatcherCW.subcomplex_insert_cell}
+    \leanfile{AlgebraicTopology/HatcherCW.lean}
+    Let $C$ be a CW complex in a Hausdorff space $X$, let $E$ be a subcomplex,
+    and let $e^n_i$ be an $n$-cell whose frontier $\partial e^n_i$ is contained
+    in $E$. Then there is a subcomplex $F$ with $E \subseteq F$ and
+    $\overline{e^n_i} \subseteq F$; if $E$ is finite, so is $F$.
+\end{lemma}
+\begin{proof}
+    Take $F$ to be the subcomplex whose cell-index is that of $E$ together with
+    the single cell $i$ in dimension $n$, and whose underlying set is
+    $E \cup \overline{e^n_i}$. Since $\overline{e^n_i} = e^n_i \cup
+    \partial e^n_i$ and $\partial e^n_i \subseteq E$, the closed cells of all
+    indexed cells lie in $F$, so this defines a subcomplex. It contains $E$ and
+    $\overline{e^n_i}$, and adds a single cell to $E$, so it is finite when $E$
+    is.
+\end{proof}
+
+\begin{lemma}[Each closed cell lies in a finite subcomplex]
+    \label{lem:cw-cell-finite-subcomplex}
+    \lean{HatcherCW.closedCell_subset_finite_subcomplex}
+    \leanfile{AlgebraicTopology/HatcherCW.lean}
+    \uses{lem:cw-finite-union, lem:cw-insert-cell}
+    Let $C$ be a CW complex in a Hausdorff space $X$. For every cell $e^n_i$ of
+    $C$ there is a finite subcomplex $F$ with $\overline{e^n_i} \subseteq F$.
+\end{lemma}
+\begin{proof}
+    \uses{lem:cw-finite-union, lem:cw-insert-cell}
+    By strong induction on $n$. The frontier $\partial e^n_i$ is contained in a
+    finite union of closed cells of dimension $< n$. By the induction
+    hypothesis each of these closed cells lies in a finite subcomplex, and by
+    Lemma~\ref{lem:cw-finite-union} their union lies in a single finite
+    subcomplex $E$ containing $\partial e^n_i$. Applying
+    Lemma~\ref{lem:cw-insert-cell} to $E$ and the cell $e^n_i$ yields a finite
+    subcomplex containing $\overline{e^n_i}$.
+\end{proof}
+
+\begin{lemma}[Compact subsets meet finitely many cells]
+    \label{lem:cw-compact-finite-cells}
+    \lean{HatcherCW.finite_cells_meeting_compact}
+    \leanfile{AlgebraicTopology/HatcherCW.lean}
+    Let $C$ be a CW complex in a Hausdorff space $X$ and $K \subseteq C$
+    compact. Then the set of cells $e^n_i$ of $C$ whose open cell meets $K$ is
+    finite.
+\end{lemma}
+\begin{proof}
+    Otherwise choose a point $x_i \in e^n_i \cap K$ in each of infinitely many
+    distinct cells met by $K$, and let $S = \{x_i\}$. Each closed cell is
+    compact and contains only finitely many of the $x_i$ (one per cell it
+    meets, and a closed cell meets finitely many open cells via its frontier),
+    so $S$ meets every closed cell in a finite, hence closed, set. By the weak
+    topology of the CW complex $S$ is therefore closed in $C$, and the same
+    argument applied to each subset of $S$ shows $S$ is discrete. A closed
+    discrete subset of the compact set $K$ is finite, contradicting that the
+    $x_i$ are distinct.
+\end{proof}
+
 \begin{proposition}[Compact subspace lies in a finite subcomplex]
     \label{prop:compact-in-finite-subcomplex}
     \lean{HatcherCW.compact_subset_finite_subcomplex}
     \leanfile{AlgebraicTopology/HatcherCW.lean}
+    \uses{lem:cw-finite-union, lem:cw-cell-finite-subcomplex,
+      lem:cw-compact-finite-cells}
     Let $C$ be a CW complex in a Hausdorff space $X$, and let $K \subseteq C$ be
     compact. Then there is a finite subcomplex $E$ of $C$ with $K \subseteq E$.
 \end{proposition}
 \begin{proof}
-    First, $K$ meets only finitely many open cells of $C$. Otherwise pick a
-    point $x_i$ in each of infinitely many distinct cells met by $K$; the set
-    $S = \{x_1, x_2, \dots\}$ meets each closed cell in a finite (hence closed)
-    set, so $S$ is closed in $C$, and the same argument applied to every subset
-    of $S$ shows $S$ is discrete. A closed discrete subset of the compact set
-    $K$ is finite, a contradiction.
-
-    Since $K$ meets finitely many cells, it suffices to show each cell lies in a
-    finite subcomplex. This follows by induction on the dimension: the image of
-    the attaching map of an $n$-cell is compact, lies in the $(n-1)$-skeleton,
-    and hence (by induction) in a finite subcomplex; adjoining the cell gives a
-    finite subcomplex containing it. A finite union of finite subcomplexes is a
-    finite subcomplex, so $K$ lies in one.
+    \uses{lem:cw-finite-union, lem:cw-cell-finite-subcomplex,
+      lem:cw-compact-finite-cells}
+    By Lemma~\ref{lem:cw-compact-finite-cells} the compact set $K$ meets only
+    finitely many open cells. Since $K \subseteq C$ is the union of the open
+    cells, $K$ is contained in the union of the finitely many closed cells it
+    meets. By Lemma~\ref{lem:cw-cell-finite-subcomplex} each of these closed
+    cells lies in a finite subcomplex, and by
+    Lemma~\ref{lem:cw-finite-union} their union lies in a single finite
+    subcomplex $E$, which therefore contains $K$.
 \end{proof}
 
 \end{document}
