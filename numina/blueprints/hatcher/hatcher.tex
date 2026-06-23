@@ -3,6 +3,191 @@
 
 \begin{document}
 
-% Your blueprint will go here.
+\section{The Compact-Open Topology}
+
+This blueprint formalizes the core point-set results about the compact-open
+topology from the Appendix (\emph{Topology of Cell Complexes}) of Hatcher's
+\emph{Algebraic Topology}, specifically Propositions A.13, A.14, and A.16.
+Throughout, $C(Y, X)$ denotes the space of continuous maps $Y \to X$ equipped
+with the compact-open topology.
+
+\subsection{Uniform convergence (Proposition A.13)}
+
+When the domain is compact and the codomain is a metric space, the compact-open
+topology is the topology of uniform convergence, induced by the supremum metric.
+This is recorded in Mathlib as the metric space structure on $C(X, Y)$, whose
+distance is the pointwise supremum.
+
+\begin{lemma}[Pointwise bound on distance]
+    \label{lem:dist-le}
+    \lean{Hatcher.dist_le}
+    \leanfile{AlgebraicTopology/Hatcher.lean}
+    Let $X$ be a compact space and $Y$ a metric space. For $f, g \in C(X, Y)$
+    and a real number $C \ge 0$, we have $d(f, g) \le C$ if and only if
+    $d(f(x), g(x)) \le C$ for every $x \in X$.
+\end{lemma}
+\begin{proof}
+    The metric on $C(X, Y)$ is pulled back along the uniform embedding of
+    $C(X, Y)$ into the bounded continuous functions $X \to Y$ (which is an
+    isometry since $X$ is compact). The corresponding statement for bounded
+    continuous functions is exactly that the distance is bounded by $C$ iff
+    every pointwise distance is. Unfolding this equivalence through the
+    embedding gives the result.
+\end{proof}
+
+\begin{proposition}[Compact-open topology is uniform convergence]
+    \label{prop:dist-eq-isup}
+    \lean{Hatcher.dist_eq_iSup}
+    \leanfile{AlgebraicTopology/Hatcher.lean}
+    \uses{lem:dist-le}
+    Let $X$ be a nonempty compact space and $Y$ a metric space. For
+    $f, g \in C(X, Y)$,
+    \[
+        d(f, g) = \sup_{x \in X} d(f(x), g(x)).
+    \]
+    Thus the compact-open topology on $C(X, Y)$ coincides with the metric
+    topology of uniform convergence.
+\end{proposition}
+\begin{proof}
+    \uses{lem:dist-le}
+    By Lemma~\ref{lem:dist-le} the number $d(f, g)$ is an upper bound for the
+    pointwise distances $x \mapsto d(f(x), g(x))$, and it is the least such
+    upper bound: any $C$ with $C \ge d(f(x), g(x))$ for all $x$ satisfies
+    $C \ge d(f, g)$. Hence $d(f, g)$ is the supremum of the pointwise
+    distances. The supremum is well defined because $X$ is compact, so the
+    continuous function $x \mapsto d(f(x), g(x))$ is bounded.
+\end{proof}
+
+\subsection{Evaluation and the exponential law (Proposition A.14)}
+
+\begin{theorem}[Continuity of evaluation]
+    \label{thm:eval-continuous}
+    \lean{Hatcher.eval_continuous}
+    \leanfile{AlgebraicTopology/Hatcher.lean}
+    Let $Y$ be a locally compact space and $X$ any space. The evaluation map
+    \[
+        e : C(Y, X) \times Y \to X, \qquad e(f, y) = f(y),
+    \]
+    is continuous.
+\end{theorem}
+\begin{proof}
+    Fix $(f, y)$ and an open neighborhood $U$ of $f(y)$. Since $f$ is
+    continuous and $Y$ is locally compact, there is a compact neighborhood $K$
+    of $y$ with $f(K) \subseteq U$, i.e. $f \in M(K, U)$. Then
+    $M(K, U) \times K$ is a neighborhood of $(f, y)$ mapped into $U$ by $e$, so
+    $e$ is continuous at $(f, y)$.
+\end{proof}
+
+\begin{lemma}[Uncurrying a continuous map is continuous]
+    \label{lem:uncurry-cont}
+    \lean{Hatcher.uncurry_continuous}
+    \leanfile{AlgebraicTopology/Hatcher.lean}
+    \uses{thm:eval-continuous}
+    Let $Y$ be locally compact and let $F : Z \to C(Y, X)$ be continuous. Then
+    the uncurried map $\widehat{F} : Z \times Y \to X$, $\widehat{F}(z, y) =
+    F(z)(y)$, is continuous.
+\end{lemma}
+\begin{proof}
+    \uses{thm:eval-continuous}
+    The map $\widehat{F}$ is the composition
+    $Z \times Y \xrightarrow{F \times \mathrm{id}} C(Y, X) \times Y
+    \xrightarrow{e} X$ of the continuous map $F \times \mathrm{id}$ with the
+    evaluation map $e$, which is continuous by
+    Theorem~\ref{thm:eval-continuous} since $Y$ is locally compact.
+\end{proof}
+
+\begin{lemma}[Currying a continuous map is continuous]
+    \label{lem:curry-cont}
+    \lean{Hatcher.curry_continuous}
+    \leanfile{AlgebraicTopology/Hatcher.lean}
+    Let $g : Z \times Y \to X$ be continuous. Then the adjoint map
+    $\check{g} : Z \to C(Y, X)$, $\check{g}(z)(y) = g(z, y)$, is continuous.
+    No local compactness hypothesis is needed.
+\end{lemma}
+\begin{proof}
+    It suffices to check that $\check{g}^{-1}(M(K, U))$ is open for each
+    subbasic open set $M(K, U)$ of $C(Y, X)$. For $z$ in this preimage,
+    $g^{-1}(U)$ is an open neighborhood of the compact set $\{z\} \times K$, so
+    there are open $V \ni z$ and $W \supseteq K$ with $V \times W \subseteq
+    g^{-1}(U)$; then $V$ is a neighborhood of $z$ contained in the preimage.
+\end{proof}
+
+\begin{proposition}[Exponential law]
+    \label{prop:exponential-law}
+    \lean{Hatcher.exponential_law}
+    \leanfile{AlgebraicTopology/Hatcher.lean}
+    \uses{lem:uncurry-cont, lem:curry-cont}
+    Let $Y$ be locally compact. A map $g : Z \times Y \to X$ is continuous if
+    and only if its adjoint $\check{g} : Z \to C(Y, X)$,
+    $\check{g}(z)(y) = g(z, y)$, is continuous.
+\end{proposition}
+\begin{proof}
+    \uses{lem:uncurry-cont, lem:curry-cont}
+    If $\check{g}$ is continuous, then $g = \widehat{\check{g}}$ is continuous
+    by Lemma~\ref{lem:uncurry-cont} (using local compactness of $Y$).
+    Conversely, if $g$ is continuous then $\check{g}$ is continuous by
+    Lemma~\ref{lem:curry-cont}.
+\end{proof}
+
+\subsection{Currying as a homeomorphism (Proposition A.16)}
+
+\begin{lemma}[Currying is continuous]
+    \label{lem:continuous-curry}
+    \lean{Hatcher.continuous_curry}
+    \leanfile{AlgebraicTopology/Hatcher.lean}
+    \uses{lem:curry-cont, thm:eval-continuous}
+    Let $Y$ and $Z$ be locally compact. The currying map
+    \[
+        \mathrm{curry} : C(Y \times Z, X) \to C(Y, C(Z, X))
+    \]
+    is continuous.
+\end{lemma}
+\begin{proof}
+    \uses{lem:curry-cont, thm:eval-continuous}
+    By Lemma~\ref{lem:curry-cont} applied twice, it suffices to show that the
+    fully uncurried map $C(Y \times Z, X) \times Y \times Z \to X$ is
+    continuous. After reassociating the product, this is an iterated evaluation
+    map, continuous by Theorem~\ref{thm:eval-continuous} since $Y$ and $Z$ are
+    locally compact.
+\end{proof}
+
+\begin{lemma}[Uncurrying is continuous]
+    \label{lem:continuous-uncurry}
+    \lean{Hatcher.continuous_uncurry}
+    \leanfile{AlgebraicTopology/Hatcher.lean}
+    \uses{lem:curry-cont, thm:eval-continuous}
+    Let $Y$ and $Z$ be locally compact. The uncurrying map
+    \[
+        \mathrm{uncurry} : C(Y, C(Z, X)) \to C(Y \times Z, X)
+    \]
+    is continuous.
+\end{lemma}
+\begin{proof}
+    \uses{lem:curry-cont, thm:eval-continuous}
+    By Lemma~\ref{lem:curry-cont}, it suffices to show the uncurried map
+    $C(Y, C(Z, X)) \times (Y \times Z) \to X$ is continuous. Reassociating, this
+    is a composition of evaluation maps, each continuous by
+    Theorem~\ref{thm:eval-continuous} since $Y$ and $Z$ are locally compact.
+\end{proof}
+
+\begin{theorem}[Currying homeomorphism]
+    \label{thm:curry-homeo}
+    \lean{Hatcher.curryHomeo}
+    \leanfile{AlgebraicTopology/Hatcher.lean}
+    \uses{lem:continuous-curry, lem:continuous-uncurry}
+    Let $Y$ and $Z$ be locally compact spaces and $X$ any space. The currying
+    map
+    \[
+        \mathrm{curry} : C(Y \times Z, X) \xrightarrow{\ \cong\ } C(Y, C(Z, X))
+    \]
+    is a homeomorphism, with inverse $\mathrm{uncurry}$.
+\end{theorem}
+\begin{proof}
+    \uses{lem:continuous-curry, lem:continuous-uncurry}
+    The maps $\mathrm{curry}$ and $\mathrm{uncurry}$ are mutually inverse
+    bijections, as one checks by evaluating both composites pointwise. Both are
+    continuous by Lemma~\ref{lem:continuous-curry} and
+    Lemma~\ref{lem:continuous-uncurry}, so $\mathrm{curry}$ is a homeomorphism.
+\end{proof}
 
 \end{document}
