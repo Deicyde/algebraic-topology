@@ -1,2 +1,3 @@
 import AlgebraicTopology.Basic
 import AlgebraicTopology.Hatcher
+import AlgebraicTopology.HatcherCW

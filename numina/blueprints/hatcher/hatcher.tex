@@ -199,4 +199,37 @@ distance is the pointwise supremum.
     Lemma~\ref{lem:continuous-uncurry}, so $\mathrm{curry}$ is a homeomorphism.
 \end{proof}
 
+\section{Topology of cell complexes}
+
+These results concern CW complexes, formalized over Mathlib's CW-complex API
+(\texttt{Topology.CWComplex}), in which a CW structure is a predicate on a set
+$C$ in an ambient space $X$ with explicit cells and characteristic maps. A
+\emph{subcomplex} is a subset that is a union of cells whose closures it
+contains; it is \emph{finite} when it has finitely many cells.
+
+\subsection{Compactness (Proposition A.1)}
+
+\begin{proposition}[Compact subspace lies in a finite subcomplex]
+    \label{prop:compact-in-finite-subcomplex}
+    \lean{HatcherCW.compact_subset_finite_subcomplex}
+    \leanfile{AlgebraicTopology/HatcherCW.lean}
+    Let $C$ be a CW complex in a Hausdorff space $X$, and let $K \subseteq C$ be
+    compact. Then there is a finite subcomplex $E$ of $C$ with $K \subseteq E$.
+\end{proposition}
+\begin{proof}
+    First, $K$ meets only finitely many open cells of $C$. Otherwise pick a
+    point $x_i$ in each of infinitely many distinct cells met by $K$; the set
+    $S = \{x_1, x_2, \dots\}$ meets each closed cell in a finite (hence closed)
+    set, so $S$ is closed in $C$, and the same argument applied to every subset
+    of $S$ shows $S$ is discrete. A closed discrete subset of the compact set
+    $K$ is finite, a contradiction.
+
+    Since $K$ meets finitely many cells, it suffices to show each cell lies in a
+    finite subcomplex. This follows by induction on the dimension: the image of
+    the attaching map of an $n$-cell is compact, lies in the $(n-1)$-skeleton,
+    and hence (by induction) in a finite subcomplex; adjoining the cell gives a
+    finite subcomplex containing it. A finite union of finite subcomplexes is a
+    finite subcomplex, so $K$ lies in one.
+\end{proof}
+
 \end{document}
