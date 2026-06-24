@@ -121,6 +121,67 @@ finitely many open cells (Lemma~\ref{lem:cw-compact-finite-cells}).
     subcomplex $E$, which therefore contains $K$.
 \end{proof}
 
+\subsection{Whitehead's characterization (Proposition A.2)}
+
+Proposition A.2 is J.H.C. Whitehead's axiomatic description of CW complexes: a
+Hausdorff space $X$ with a family of characteristic maps
+$\Phi_\alpha : D^n_\alpha \to X$ carries a CW structure with these as its
+characteristic maps iff (i) each $\Phi_\alpha$ is injective on
+$\operatorname{int} D^n_\alpha$, the resulting open cells are disjoint and cover
+$X$; (ii) each $\Phi_\alpha(\partial D^n_\alpha)$ lies in a finite union of cells
+of dimension $< n$; (iii) $X$ has the weak topology with respect to the closed
+cells. Mathlib's \texttt{Topology.CWComplex} class is \emph{defined} by exactly
+these axioms, together with the characteristic-map data, with one addition: it
+also requires continuity of the inverse characteristic map
+(\texttt{continuousOn\_symm}). Hatcher derives this --- the ``hence a
+homeomorphism'' in condition (i) --- from compactness of $D^n_\alpha$ and
+Hausdorffness of $X$, and that derivation is the mathematical content of the
+$\Leftarrow$ direction over Mathlib's API.
+
+\begin{lemma}[Inverse characteristic map is continuous]
+    \label{lem:whitehead-inverse-homeo}
+    \lean{HatcherWhitehead.continuousOn_invFunOn_ball}
+    \leanfile{AlgebraicTopology/HatcherWhitehead.lean}
+    \leanok
+    Let $X$ be Hausdorff and $f : D^n \to X$ continuous on the closed unit ball,
+    injective on the open ball, with $f(\operatorname{int} D^n)$ disjoint from
+    $f(\partial D^n)$. Then the inverse of $f$ on the open cell
+    $f(\operatorname{int} D^n)$ is continuous.
+\end{lemma}
+\begin{proof}
+    Using the weak-topology characterization of continuity, it suffices, for
+    each closed $C \subseteq D^n$, to exhibit a closed set whose intersection
+    with the open cell equals $f^{-1}$ applied to $C$. Take $f(C \cap D^n)$,
+    which is compact (continuous image of a compact set) hence closed in the
+    Hausdorff space $X$. Injectivity on the open ball and disjointness of the
+    open cell from the sphere image show both this set and the preimage meet the
+    open cell in exactly $f(\operatorname{int} D^n \cap C)$.
+\end{proof}
+
+\begin{proposition}[Whitehead's characterization of CW complexes]
+    \label{prop:whitehead-cw}
+    \lean{HatcherWhitehead.mkWhitehead}
+    \leanfile{AlgebraicTopology/HatcherWhitehead.lean}
+    \uses{lem:whitehead-inverse-homeo}
+    \leanok
+    Let $X$ be Hausdorff with characteristic maps $\Phi_\alpha$ satisfying
+    conditions (i)--(iii) above (with (ii) phrased, as Hatcher states it, in
+    terms of open cells of lower dimension). Then the $\Phi_\alpha$ are the
+    characteristic maps of a CW structure on $C$.
+\end{proposition}
+\begin{proof}
+    \uses{lem:whitehead-inverse-homeo}
+    Conditions (i)--(iii) are precisely the data and axioms of Mathlib's
+    \texttt{CWComplex} class except for the inverse-continuity axiom
+    \texttt{continuousOn\_symm}. That axiom is supplied by
+    Lemma~\ref{lem:whitehead-inverse-homeo}: for each cell, condition (ii) (open
+    form) together with disjointness of the open cells (i) shows the open cell is
+    disjoint from its sphere image, so the lemma gives continuity of the inverse
+    characteristic map. The closed-cell form of (ii) required by the class
+    follows from the open-cell form since open cells are contained in closed
+    cells.
+\end{proof}
+
 \section{The Compact-Open Topology}
 
 This section formalizes the core point-set results about the compact-open
