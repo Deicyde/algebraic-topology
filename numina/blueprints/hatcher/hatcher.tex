@@ -239,6 +239,7 @@ finitely many open cells (Lemma~\ref{lem:cw-compact-finite-cells}).
     \label{lem:cw-insert-cell}
     \lean{HatcherCW.subcomplex_insert_cell}
     \leanfile{AlgebraicTopology/HatcherCW.lean}
+    \leanok
     Let $C$ be a CW complex in a Hausdorff space $X$, let $E$ be a subcomplex,
     and let $e^n_i$ be an $n$-cell whose frontier $\partial e^n_i$ is contained
     in $E$. Then there is a subcomplex $F$ with $E \subseteq F$ and
@@ -259,6 +260,7 @@ finitely many open cells (Lemma~\ref{lem:cw-compact-finite-cells}).
     \lean{HatcherCW.closedCell_subset_finite_subcomplex}
     \leanfile{AlgebraicTopology/HatcherCW.lean}
     \uses{lem:cw-finite-union, lem:cw-insert-cell}
+    \leanok
     Let $C$ be a CW complex in a Hausdorff space $X$. For every cell $e^n_i$ of
     $C$ there is a finite subcomplex $F$ with $\overline{e^n_i} \subseteq F$.
 \end{lemma}
@@ -277,6 +279,7 @@ finitely many open cells (Lemma~\ref{lem:cw-compact-finite-cells}).
     \label{lem:cw-compact-finite-cells}
     \lean{HatcherCW.finite_cells_meeting_compact}
     \leanfile{AlgebraicTopology/HatcherCW.lean}
+    \leanok
     Let $C$ be a CW complex in a Hausdorff space $X$ and $K \subseteq C$
     compact. Then the set of cells $e^n_i$ of $C$ whose open cell meets $K$ is
     finite.
@@ -297,8 +300,8 @@ finitely many open cells (Lemma~\ref{lem:cw-compact-finite-cells}).
     \label{prop:compact-in-finite-subcomplex}
     \lean{HatcherCW.compact_subset_finite_subcomplex}
     \leanfile{AlgebraicTopology/HatcherCW.lean}
-    \uses{lem:cw-finite-union, lem:cw-cell-finite-subcomplex,
-      lem:cw-compact-finite-cells}
+    \uses{lem:cw-finite-union, lem:cw-cell-finite-subcomplex, lem:cw-compact-finite-cells}
+    \leanok
     Let $C$ be a CW complex in a Hausdorff space $X$, and let $K \subseteq C$ be
     compact. Then there is a finite subcomplex $E$ of $C$ with $K \subseteq E$.
 \end{proposition}
