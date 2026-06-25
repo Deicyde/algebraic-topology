@@ -70,4 +70,14 @@ theorem isOpen_collarSlice {ε : ℝ} (hε : ε < 1) {U : Set (Fin n → ℝ)}
   rw [heq]
   exact (continuousOn_radialProj.mono hsub).isOpen_inter_preimage (isOpen_collar ε) hU
 
+/-- **Analytic core of "small enough `ε`".** Two disjoint compact sets in a
+metric space admit a common positive thickening radius keeping their open
+thickenings disjoint. This is exactly Hatcher's step: on each disk the preimages
+of the disjoint closed sets are compact and a positive distance apart, so a small
+enough cell-wise `ε_α` keeps the cell neighborhoods disjoint. -/
+theorem exists_eps_separating_thickenings {α : Type*} [MetricSpace α]
+    {s t : Set α} (hs : IsCompact s) (ht : IsCompact t) (hst : Disjoint s t) :
+    ∃ ε > 0, Disjoint (Metric.thickening ε s) (Metric.thickening ε t) :=
+  hst.exists_thickenings hs ht.isClosed
+
 end HatcherNeighborhood
