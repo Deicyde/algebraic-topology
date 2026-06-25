@@ -82,6 +82,104 @@ theorem subset_NbhdUnion [CWComplex C] {A : Set X} (hAC : A ⊆ C)
     refine Set.mem_union_right _ (mem_iUnion.mpr ⟨i, ⟨p, ⟨hp_ball, Or.inl ?_⟩, rfl⟩⟩)
     exact Metric.self_subset_thickening (hε (m + 1) i) _ ⟨ha, hp_ball⟩
 
+/-- The stages of the construction are monotone in the skeleton index. -/
+theorem Nbhd_mono [CWComplex C] (A : Set X)
+    (ε : ∀ n, Topology.CWComplex.cell C n → ℝ) : Monotone (Nbhd A ε) :=
+  monotone_nat_of_le_succ fun n x hx => by
+    simp only [Nbhd]; exact Set.mem_union_left _ hx
+
+/-- Disjointness of the full neighborhoods reduces to disjointness at every stage,
+using monotonicity: any two stages are dominated by their maximum. -/
+theorem disjoint_NbhdUnion_of_forall [CWComplex C] {A B : Set X}
+    {ε : ∀ n, Topology.CWComplex.cell C n → ℝ}
+    (h : ∀ k, Disjoint (Nbhd A ε k) (Nbhd B ε k)) :
+    Disjoint (NbhdUnion A ε) (NbhdUnion B ε) := by
+  rw [NbhdUnion, NbhdUnion, Set.disjoint_iUnion_left]
+  intro n
+  rw [Set.disjoint_iUnion_right]
+  intro m
+  rcases le_total n m with hnm | hmn
+  · exact (h m).mono_left (Nbhd_mono A ε hnm)
+  · exact (h n).mono_right (Nbhd_mono B ε hmn)
+
+/-- A lower stage (living in the `k`-skeleton) is disjoint from any image of a
+subset of the open ball under a `(k+1)`-cell characteristic map (which lives in the
+open `(k+1)`-cell, disjoint from the `k`-skeleton). This is the `ε`-free part of the
+inductive disjointness step. -/
+theorem Nbhd_disjoint_image_succ [CWComplex C] (A : Set X)
+    (ε : ∀ n, Topology.CWComplex.cell C n → ℝ) (k : ℕ)
+    {S : Set (Fin (k + 1) → ℝ)} (hS : S ⊆ ball 0 1)
+    (i : Topology.CWComplex.cell C (k + 1)) :
+    Disjoint (Nbhd A ε k) (Topology.CWComplex.map (k + 1) i '' S) := by
+  have himg : Topology.CWComplex.map (k + 1) i '' S
+      ⊆ Topology.CWComplex.map (k + 1) i '' ball 0 1 := Set.image_mono hS
+  have hdisj : Disjoint (↑(Topology.CWComplex.skeleton C (k : ℕ∞)) : Set X)
+      (Topology.CWComplex.map (k + 1) i '' ball 0 1) :=
+    Topology.CWComplex.disjoint_skeleton_openCell (C := C) (n := (k : ℕ∞)) (j := i)
+      (by exact_mod_cast Nat.lt_succ_self k)
+  exact hdisj.mono (Nbhd_subset_skeleton A ε k) himg
+
+/-- The per-cell source set adjoined on an `(k+1)`-cell at stage `k+1`: the open
+`ε`-thickening of `map ⁻¹' A` together with the spherical collar referring to the
+previous stage. -/
+def cellSource [CWComplex C] (A : Set X) (ε : ∀ n, Topology.CWComplex.cell C n → ℝ)
+    (k : ℕ) (i : Topology.CWComplex.cell C (k + 1)) : Set (Fin (k + 1) → ℝ) :=
+  { y : Fin (k + 1) → ℝ | y ∈ ball 0 1 ∧
+      (y ∈ thickening (ε (k + 1) i)
+            ((Topology.CWComplex.map (k + 1) i ⁻¹' A) ∩ ball 0 1)
+       ∨ (1 - ε (k + 1) i < ‖y‖ ∧
+            Topology.CWComplex.map (k + 1) i (‖y‖⁻¹ • y) ∈ Nbhd A ε k)) }
+
+theorem cellSource_subset_ball [CWComplex C] (A : Set X)
+    (ε : ∀ n, Topology.CWComplex.cell C n → ℝ) (k : ℕ)
+    (i : Topology.CWComplex.cell C (k + 1)) : cellSource A ε k i ⊆ ball 0 1 :=
+  fun _ hy => hy.1
+
+theorem Nbhd_succ_eq [CWComplex C] (A : Set X)
+    (ε : ∀ n, Topology.CWComplex.cell C n → ℝ) (k : ℕ) :
+    Nbhd A ε (k + 1) = Nbhd A ε k ∪
+      ⋃ i, Topology.CWComplex.map (k + 1) i '' cellSource A ε k i := rfl
+
+/-- **Inductive disjointness step, modulo the per-cell condition.** Given the
+previous stages disjoint and, on each `(k+1)`-cell, the two in-disk source sets
+disjoint, the next stages are disjoint. The proof splits the four cross-terms:
+the previous stages (hypothesis), a previous stage against new cells (disjoint
+skeleton vs open cells), and new cells against new cells — equal cells via
+injectivity of the characteristic map on the ball, distinct cells via
+disjointness of open cells. The remaining work is to choose `ε` realizing the
+per-cell hypothesis. -/
+theorem disjoint_Nbhd_succ [CWComplex C] {A B : Set X}
+    {ε : ∀ n, Topology.CWComplex.cell C n → ℝ} {k : ℕ}
+    (ih : Disjoint (Nbhd A ε k) (Nbhd B ε k))
+    (hcell : ∀ i, Disjoint (cellSource A ε k i) (cellSource B ε k i)) :
+    Disjoint (Nbhd A ε (k + 1)) (Nbhd B ε (k + 1)) := by
+  rw [Nbhd_succ_eq, Nbhd_succ_eq, Set.disjoint_union_left, Set.disjoint_union_right,
+    Set.disjoint_union_right]
+  refine ⟨⟨ih, ?_⟩, ?_, ?_⟩
+  · rw [Set.disjoint_iUnion_right]
+    exact fun i => Nbhd_disjoint_image_succ A ε k (cellSource_subset_ball B ε k i) i
+  · rw [Set.disjoint_iUnion_left]
+    exact fun i => (Nbhd_disjoint_image_succ B ε k (cellSource_subset_ball A ε k i) i).symm
+  · rw [Set.disjoint_iUnion_left]
+    intro i
+    rw [Set.disjoint_iUnion_right]
+    intro j
+    rcases eq_or_ne i j with rfl | hij
+    · have hinj : Set.InjOn (Topology.CWComplex.map (k + 1) i) (ball 0 1) :=
+        Topology.CWComplex.source_eq (k + 1) i ▸ (Topology.CWComplex.map (k + 1) i).injOn
+      rw [Set.disjoint_left]
+      rintro z ⟨a, ha, rfl⟩ ⟨b, hb, hab⟩
+      have hab' : a = b :=
+        hinj (cellSource_subset_ball A ε k i ha) (cellSource_subset_ball B ε k i hb) hab.symm
+      exact (Set.disjoint_left.mp (hcell i)) ha (hab' ▸ hb)
+    · have hne : (⟨k + 1, i⟩ : Σ n, Topology.CWComplex.cell C n) ≠ ⟨k + 1, j⟩ := by
+        rintro h; exact hij (by simpa using h)
+      have hd : Disjoint (Topology.CWComplex.map (k + 1) i '' ball 0 1)
+          (Topology.CWComplex.map (k + 1) j '' ball 0 1) :=
+        Topology.CWComplex.disjoint_openCell_of_ne (C := C) hne
+      exact hd.mono (Set.image_mono (cellSource_subset_ball A ε k i))
+        (Set.image_mono (cellSource_subset_ball B ε k j))
+
 /-- **Openness of the neighborhood.** `N_ε(A)` is open as a subset of the subspace
 `C`: by the weak topology it suffices that it pulls back to an open set under each
 characteristic map, and the cell-wise description is an open `ε`-thickening unioned
@@ -90,6 +188,20 @@ inductive openness over the skeleta is the remaining work. -/
 theorem isOpen_NbhdUnion [CWComplex C] (A : Set X)
     (ε : ∀ n, Topology.CWComplex.cell C n → ℝ) :
     IsOpen (Subtype.val ⁻¹' NbhdUnion A ε : Set C) := by
+  sorry
+
+/-- **The remaining crux: choosing the radii.** For disjoint sets closed in `C`
+there is a positive cell-wise radius assignment making, at every stage and every
+cell, the two in-disk source sets disjoint. This is Hatcher's "small enough
+`ε_α`", constructed by recursion over the skeleta: on each cell the radius is chosen
+via `HatcherNeighborhood.exists_eps_separating_thickenings` applied to the disjoint
+compact preimages, the collar parts being disjoint by the previous stage. This is
+the one analytic/recursive obligation left in the normality proof. -/
+theorem exists_eps_cellwise_disjoint [CWComplex C] {A B : Set X}
+    (hA : IsClosed (Subtype.val ⁻¹' A : Set C))
+    (hB : IsClosed (Subtype.val ⁻¹' B : Set C)) (hAB : Disjoint A B) :
+    ∃ ε : ∀ n, Topology.CWComplex.cell C n → ℝ, (∀ n i, 0 < ε n i) ∧
+      ∀ k i, Disjoint (cellSource A ε k i) (cellSource B ε k i) := by
   sorry
 
 /-- **Separation by small radii.** For disjoint sets `A, B` that are closed in `C`,
@@ -104,7 +216,17 @@ theorem exists_eps_disjoint [CWComplex C] {A B : Set X}
     (hB : IsClosed (Subtype.val ⁻¹' B : Set C)) (hAB : Disjoint A B) :
     ∃ ε : ∀ n, Topology.CWComplex.cell C n → ℝ,
       (∀ n i, 0 < ε n i) ∧ Disjoint (NbhdUnion A ε) (NbhdUnion B ε) := by
-  sorry
+  -- Reduce to a positive `ε` realizing the per-cell, in-disk disjointness at every
+  -- stage; the global disjointness then follows by the stagewise induction
+  -- (`disjoint_Nbhd_succ`) and `disjoint_NbhdUnion_of_forall`.
+  obtain ⟨ε, hpos, hcell⟩ :
+      ∃ ε : ∀ n, Topology.CWComplex.cell C n → ℝ, (∀ n i, 0 < ε n i) ∧
+        ∀ k i, Disjoint (cellSource A ε k i) (cellSource B ε k i) :=
+    exists_eps_cellwise_disjoint hA hB hAB
+  refine ⟨ε, hpos, disjoint_NbhdUnion_of_forall (fun k => ?_)⟩
+  induction k with
+  | zero => simp only [Nbhd]; exact hAB.mono inter_subset_left inter_subset_left
+  | succ k ih => exact disjoint_Nbhd_succ ih (hcell k)
 
 /-- **Separating neighborhoods of disjoint closed sets.** For any two disjoint
 subsets `A, B` of the subspace `C` that are closed in `C`, there exist disjoint
