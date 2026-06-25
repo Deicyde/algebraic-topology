@@ -190,6 +190,46 @@ theorem isOpen_NbhdUnion [CWComplex C] (A : Set X)
     IsOpen (Subtype.val ⁻¹' NbhdUnion A ε : Set C) := by
   sorry
 
+/-- The collar parts of the two cell source sets are disjoint, purely because the
+previous stage is disjoint: a point in both collars has the same angular coordinate
+`‖y‖⁻¹ • y`, which would then be mapped into both `Nbhd A ε k` and `Nbhd B ε k`. -/
+theorem disjoint_collar [CWComplex C] {A B : Set X}
+    {ε : ∀ n, Topology.CWComplex.cell C n → ℝ} {k : ℕ}
+    (ih : Disjoint (Nbhd A ε k) (Nbhd B ε k))
+    (i : Topology.CWComplex.cell C (k + 1)) :
+    Disjoint
+      {y : Fin (k + 1) → ℝ | 1 - ε (k + 1) i < ‖y‖ ∧
+        Topology.CWComplex.map (k + 1) i (‖y‖⁻¹ • y) ∈ Nbhd A ε k}
+      {y : Fin (k + 1) → ℝ | 1 - ε (k + 1) i < ‖y‖ ∧
+        Topology.CWComplex.map (k + 1) i (‖y‖⁻¹ • y) ∈ Nbhd B ε k} := by
+  rw [Set.disjoint_left]
+  rintro y ⟨_, hyA⟩ ⟨_, hyB⟩
+  exact Set.disjoint_left.mp ih hyA hyB
+
+/-- The preimage of a set closed in `C` intersected with the closed ball is
+compact: `C` is closed in the Hausdorff space `X`, so the set is closed in `X`,
+and its intersection with the (compact) closed ball is a closed subset. This
+provides the disjoint compact sets that feed the thickening-separation engine. -/
+theorem isCompact_preimage_inter_closedBall [CWComplex C] {A : Set X}
+    (hA : IsClosed (Subtype.val ⁻¹' A : Set C)) (k : ℕ)
+    (i : Topology.CWComplex.cell C (k + 1)) :
+    IsCompact (Topology.CWComplex.map (k + 1) i ⁻¹' A ∩ closedBall 0 1) := by
+  obtain ⟨F, hFcl, hFA⟩ := isClosed_induced_iff.mp hA
+  have hmapC : ∀ x ∈ closedBall (0 : Fin (k + 1) → ℝ) 1,
+      Topology.CWComplex.map (k + 1) i x ∈ C :=
+    fun x hx => Topology.CWComplex.closedCell_subset_complex (k + 1) i ⟨x, hx, rfl⟩
+  have heq : Topology.CWComplex.map (k + 1) i ⁻¹' A ∩ closedBall 0 1
+      = closedBall 0 1 ∩ Topology.CWComplex.map (k + 1) i ⁻¹' F := by
+    ext x
+    refine ⟨fun hx => ⟨hx.2, (Set.ext_iff.mp hFA ⟨_, hmapC x hx.2⟩).mpr hx.1⟩,
+      fun hx => ⟨(Set.ext_iff.mp hFA ⟨_, hmapC x hx.1⟩).mp hx.2, hx.1⟩⟩
+  rw [heq]
+  have hcl : IsClosed (closedBall (0 : Fin (k + 1) → ℝ) 1
+      ∩ Topology.CWComplex.map (k + 1) i ⁻¹' F) :=
+    (Topology.CWComplex.continuousOn (k + 1) i).preimage_isClosed_of_isClosed
+      isClosed_closedBall hFcl
+  exact (isCompact_closedBall 0 1).of_isClosed_subset hcl Set.inter_subset_left
+
 /-- **The remaining crux: choosing the radii.** For disjoint sets closed in `C`
 there is a positive cell-wise radius assignment making, at every stage and every
 cell, the two in-disk source sets disjoint. This is Hatcher's "small enough
