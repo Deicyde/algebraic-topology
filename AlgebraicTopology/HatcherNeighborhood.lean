@@ -80,4 +80,15 @@ theorem exists_eps_separating_thickenings {α : Type*} [MetricSpace α]
     ∃ ε > 0, Disjoint (Metric.thickening ε s) (Metric.thickening ε t) :=
   hst.exists_thickenings hs ht.isClosed
 
+/-- A separating thickening radius that keeps working for all smaller positive
+radii. Useful for the radius recursion, where a cell's radius may be forced smaller
+by several constraints simultaneously. -/
+theorem exists_eps_thickenings_subset {α : Type*} [MetricSpace α]
+    {P Q : Set α} (hP : IsCompact P) (hQ : IsCompact Q) (hPQ : Disjoint P Q) :
+    ∃ δ > 0, ∀ ε, 0 < ε → ε ≤ δ →
+      Disjoint (Metric.thickening ε P) (Metric.thickening ε Q) := by
+  obtain ⟨δ, hδ, hd⟩ := exists_eps_separating_thickenings hP hQ hPQ
+  exact ⟨δ, hδ, fun ε _ hεδ =>
+    hd.mono (Metric.thickening_mono hεδ P) (Metric.thickening_mono hεδ Q)⟩
+
 end HatcherNeighborhood
