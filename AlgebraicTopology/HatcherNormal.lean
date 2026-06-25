@@ -88,6 +88,23 @@ theorem Nbhd_mono [CWComplex C] (A : Set X)
   monotone_nat_of_le_succ fun n x hx => by
     simp only [Nbhd]; exact Set.mem_union_left _ hx
 
+/-- **Locality of the construction.** The stage `Nbhd A ε k` only consults `ε` at
+dimensions `≤ k`: two radius assignments agreeing up to dimension `k` give the same
+stage. This breaks the circularity when building `ε` by recursion over the skeleta. -/
+theorem Nbhd_congr [CWComplex C] (A : Set X)
+    {ε ε' : ∀ n, Topology.CWComplex.cell C n → ℝ} :
+    ∀ k, (∀ n, n ≤ k → ε n = ε' n) → Nbhd A ε k = Nbhd A ε' k := by
+  intro k
+  induction k with
+  | zero => intro _; rfl
+  | succ k ih =>
+    intro h
+    have hNbhd : Nbhd A ε k = Nbhd A ε' k :=
+      ih fun n hn => h n (hn.trans (Nat.le_succ k))
+    have hek1 : ε (k + 1) = ε' (k + 1) := h (k + 1) le_rfl
+    simp only [Nbhd]
+    rw [hNbhd, hek1]
+
 /-- Disjointness of the full neighborhoods reduces to disjointness at every stage,
 using monotonicity: any two stages are dominated by their maximum. -/
 theorem disjoint_NbhdUnion_of_forall [CWComplex C] {A B : Set X}
