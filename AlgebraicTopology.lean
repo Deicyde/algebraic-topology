@@ -1,3 +1,6 @@
 import AlgebraicTopology.Basic
 import AlgebraicTopology.Hatcher
 import AlgebraicTopology.HatcherCW
+import AlgebraicTopology.HatcherNeighborhood
+import AlgebraicTopology.HatcherNormal
+import AlgebraicTopology.HatcherWhitehead

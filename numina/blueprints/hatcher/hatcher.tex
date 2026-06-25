@@ -182,6 +182,61 @@ $\Leftarrow$ direction over Mathlib's API.
     cells.
 \end{proof}
 
+\subsection{Normality (Proposition A.3)}
+
+Proposition A.3 of Hatcher's appendix asserts that every CW complex is normal,
+and in particular Hausdorff. Over Mathlib's \texttt{Topology.CWComplex} API the
+ambient space $X$ is already assumed Hausdorff, so the mathematical content is
+the normality of the subspace $C$: any two disjoint closed subsets of $C$ have
+disjoint open neighborhoods. Hatcher's proof builds these neighborhoods by an
+inductive construction over the skeleta: given a subset $A$ and a choice of
+$\varepsilon_\alpha > 0$ for each cell, one defines an open set
+$N_\varepsilon(A) \supseteq A$ whose preimage under each characteristic map
+$\Phi_\alpha : D^n_\alpha \to X$ is an open $\varepsilon$-neighborhood of
+$\Phi_\alpha^{-1}(A) \cup \partial D^n_\alpha$ together with a collar
+$(1-\varepsilon, 1] \times \Phi_\alpha^{-1}(N_\varepsilon^{n-1}(A))$ in spherical
+coordinates. For disjoint closed $A$ and $B$ the cell-wise radii can be chosen
+small enough that $N_\varepsilon(A)$ and $N_\varepsilon(B)$ are disjoint, which
+gives normality.
+
+\begin{lemma}[Separating neighborhoods of disjoint closed sets]
+    \label{lem:cw-separating-nbhd}
+    \lean{HatcherNormal.exists_disjoint_nhds}
+    \leanfile{AlgebraicTopology/HatcherNormal.lean}
+    Let $C$ be a CW complex in a Hausdorff space $X$. For any two disjoint
+    subsets $A, B$ of $C$ that are closed in $C$, there exist disjoint open
+    subsets $U, V$ of $C$ with $A \subseteq U$ and $B \subseteq V$.
+\end{lemma}
+\begin{proof}
+    Build the open neighborhoods $N_\varepsilon(A)$ and $N_\varepsilon(B)$ by
+    induction over the skeleta as above, starting from the empty neighborhood on
+    the $0$-skeleton and extending across each cell by adjoining an open
+    $\varepsilon$-neighborhood of the preimage together with a spherical collar.
+    Since $A$ and $B$ are closed and disjoint, on each closed cell the preimages
+    of $A$ and $B$ are disjoint compact sets, so a positive radius
+    $\varepsilon_\alpha$ can be chosen making the cell-wise neighborhoods
+    disjoint; the resulting unions $N_\varepsilon(A)$ and $N_\varepsilon(B)$ are
+    open, contain $A$ and $B$, and are disjoint.
+\end{proof}
+
+\begin{proposition}[CW complexes are normal]
+    \label{prop:cw-normal}
+    \lean{HatcherNormal.normalSpace}
+    \leanfile{AlgebraicTopology/HatcherNormal.lean}
+    \uses{lem:cw-separating-nbhd}
+    Let $C$ be a CW complex in a Hausdorff space $X$. Then the subspace $C$ is a
+    normal space (and, being a subspace of a Hausdorff space, Hausdorff).
+\end{proposition}
+\begin{proof}
+    \uses{lem:cw-separating-nbhd}
+    Points are closed in $C$ since they pull back to closed sets under every
+    characteristic map, and $C$ is Hausdorff as a subspace of the Hausdorff space
+    $X$. Normality is exactly
+    Lemma~\ref{lem:cw-separating-nbhd}: disjoint closed subsets of $C$ are
+    separated by the disjoint open neighborhoods $N_\varepsilon(A)$ and
+    $N_\varepsilon(B)$.
+\end{proof}
+
 \section{The Compact-Open Topology}
 
 This section formalizes the core point-set results about the compact-open
